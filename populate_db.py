@@ -4,7 +4,6 @@ from models import Make, Model, Engine, Listing
 
 def seed():
     with app.app_context():
-        # Sterg datele vechi in oridne inversa pt a nu da crash
         db.session.query(Listing).delete()
         db.session.query(Engine).delete()
         db.session.query(Model).delete()
@@ -100,8 +99,141 @@ def seed():
         for m in models_opel:
             db.session.add(Model(name = m, make = opel))
 
+        seat = Make(name = "Seat")
+        db.session.add(seat)
+        models_seat = ["Leon", "Ibiza", "Alhambra", "Altea", "Arona", "Ateca", "Exeo", "Tarraco", "Toledo"]
+        for m in models_seat:
+            db.session.add(Model(name = m, make = seat))
+
+        peugeot = Make(name = "Peugeot")
+        db.session.add(peugeot)
+        models_peugeot = ["207", "208", "2008", "301", "307", "308", "3008", "407", "408", "4007", "4008", "508", "5008", "Partner"]
+        for m in models_peugeot:
+            db.session.add(Model(name = m, make = peugeot))
+
+        porsche = Make(name = "Porsche")
+        db.session.add(porsche)
+        models_porsche = ["Boxter", "Cayenne", "Cayenne Coupe", "Cayman", "Macan", "Panamera", "Taycan", "911", "911-TURBO-S"]
+        for m in models_porsche:
+            db.session.add(Model(name = m, make = porsche))
+
+        suzuki = Make(name = "Suzuki")
+        db.session.add(suzuki)
+        models_suzuki = ["Grand Vitara", "Jimny", "Swace", "Swift", "S-Cross", "SX4", "Vitara"]
+        for m in models_suzuki:
+            db.session.add(Model(name = m, make = suzuki))
+
+        toyota = Make(name = "Toyota")
+        db.session.add(toyota)
+        models_toyota = ["Avensis", "Aygo", "C-HR", "Camry", "Corolla", "Corolla Cross", "Highlander", "Hilux", "Land Cruiser", "Prius", "Proace", "RAV4", "Yaris", "Yaris Cross"]
+        for m in models_toyota:
+            db.session.add(Model(name = m, make = toyota))
+
+        volvo = Make(name = "Volvo")
+        db.session.add(volvo)
+        models_volvo = ["S40", "S60", "S80", "S90", "V40", "V50", "V60", "V70", "V90", "XC40", "XC60", "XC70", "XC90"]
+        for m in models_volvo:
+            db.session.add(Model(name = m, make = volvo))
+
         db.session.commit()
-        print("Baza de date updatata")
+
+        octavia = Model.query.filter_by(name="Octavia").first()
+        if octavia:
+            # Octavia 4
+            eng_oct_1 = Engine(name="2.0 TDI", power_hp = 150, displacement_cc = 1968, fuel_type = "Diesel", euro_norm = "Euro 6", model = octavia)
+            eng_oct_2 = Engine(name="2.0 TDI", power_hp = 115, displacement_cc = 1968, fuel_type = "Diesel", euro_norm = "Euro 6", model = octavia)
+            eng_oct_3 = Engine(name="2.0 TDI", power_hp = 200, displacement_cc = 1968, fuel_type = "Diesel", euro_norm = "Euro 6", model = octavia)
+            eng_oct_4 = Engine(name="2.0 TSI", power_hp = 245, displacement_cc = 1984, fuel_type = "Benzina", euro_norm = "Euro 6", model = octavia)
+            eng_oct_5 = Engine(name="1.5 TSI", power_hp = 150, displacement_cc = 1498, fuel_type = "Benzina", euro_norm = "Euro 6", model = octavia)
+            eng_oct_6 = Engine(name="1.5 TSI mHEV", power_hp = 150, displacement_cc = 1498, fuel_type = "Mild Hybrid", euro_norm = "Euro 6", model = octavia)
+            eng_oct_7 = Engine(name="1.0 TSI", power_hp = 110, displacement_cc = 999, fuel_type = "Benzina", euro_norm = "Euro 6", model = octavia)
+            eng_oct_8 = Engine(name="1.4 TSI iV", power_hp = 204, displacement_cc = 1395, fuel_type = "Hybrid", euro_norm = "Euro 6", model = octavia)
+
+            # Octavia 3
+            eng_oct_9 = Engine(name="2.0 TDI", power_hp = 184, displacement_cc = 1968, fuel_type = "Diesel", euro_norm = "Euro 6", model = octavia)
+            eng_oct_10 = Engine(name="2.0 TDI", power_hp = 184, displacement_cc = 1968, fuel_type = "Diesel", euro_norm = "Euro 5", model = octavia)
+            eng_oct_11 = Engine(name="2.0 TSI", power_hp = 220, displacement_cc = 1984, fuel_type = "Benzina", euro_norm = "Euro 6", model = octavia)
+            eng_oct_12 = Engine(name="2.0 TSI", power_hp = 230, displacement_cc = 1984, fuel_type = "Benzina", euro_norm = "Euro 6", model = octavia)
+            eng_oct_13 = Engine(name="2.0 TSI", power_hp = 245, displacement_cc = 1984, fuel_type = "Benzina", euro_norm = "Euro 6", model = octavia)
+            eng_oct_14 = Engine(name="2.0 TDI", power_hp = 150, displacement_cc = 1968, fuel_type = "Diesel", euro_norm = "Euro 6", model = octavia)
+            eng_oct_15 = Engine(name="2.0 TDI", power_hp = 150, displacement_cc = 1968, fuel_type = "Diesel", euro_norm = "Euro 5", model = octavia)
+            eng_oct_16 = Engine(name="1.6 TDI", power_hp = 115, displacement_cc = 1598, fuel_type = "Diesel", euro_norm = "Euro 6", model = octavia)
+            eng_oct_17 = Engine(name="1.6 TDI", power_hp = 110, displacement_cc = 1598, fuel_type = "Diesel", euro_norm = "Euro 6", model = octavia)
+            eng_oct_18 = Engine(name="1.6 TDI", power_hp = 105, displacement_cc = 1598, fuel_type = "Diesel", euro_norm = "Euro 5", model = octavia)
+            eng_oct_19 = Engine(name="1.8 TSI", power_hp = 180, displacement_cc = 1798, fuel_type = "Benzina", euro_norm = "Euro 6", model = octavia)
+            eng_oct_20 = Engine(name="1.4 TSI", power_hp = 150, displacement_cc = 1395, fuel_type = "Benzina", euro_norm = "Euro 6", model = octavia)
+            eng_oct_21 = Engine(name="1.4 TSI", power_hp = 140, displacement_cc = 1395, fuel_type = "Benzina", euro_norm = "Euro 5", model = octavia)
+            eng_oct_22 = Engine(name="1.2 TSI", power_hp = 105, displacement_cc = 1197, fuel_type = "Benzina", euro_norm = "Euro 5", model = octavia)
+
+            # Octavia 2
+            eng_oct_23 = Engine(name="2.0 TDI", power_hp = 170, displacement_cc = 1968, fuel_type = "Diesel", euro_norm = "Euro 5", model = octavia)
+            eng_oct_24 = Engine(name="2.0 TDI", power_hp = 140, displacement_cc = 1968, fuel_type = "Diesel", euro_norm = "Euro 5", model = octavia)
+            eng_oct_25 = Engine(name="1.6 TDI", power_hp = 105, displacement_cc = 1598, fuel_type = "Diesel", euro_norm = "Euro 5", model = octavia)
+            eng_oct_26 = Engine(name="2.0 TSI", power_hp = 200, displacement_cc = 1984, fuel_type = "Benzina", euro_norm = "Euro 5", model = octavia)
+            eng_oct_27 = Engine(name="1.8 TSI", power_hp = 160, displacement_cc = 1798, fuel_type = "Benzina", euro_norm = "Euro 5", model = octavia)
+            eng_oct_28 = Engine(name="1.4 TSI", power_hp = 122, displacement_cc = 1390, fuel_type = "Benzina", euro_norm = "Euro 5", model = octavia)
+            eng_oct_29 = Engine(name="2.0 TDI", power_hp = 170, displacement_cc = 1968, fuel_type = "Diesel", euro_norm = "Euro 4", model = octavia)
+            eng_oct_30 = Engine(name="2.0 TDI", power_hp = 140, displacement_cc = 1968, fuel_type = "Diesel", euro_norm = "Euro 4", model = octavia)
+            eng_oct_31 = Engine(name="1.9 TDI", power_hp = 105, displacement_cc = 1896, fuel_type = "Diesel", euro_norm = "Euro 4", model = octavia)
+            eng_oct_32 = Engine(name="2.0 TSI", power_hp = 200, displacement_cc = 1984, fuel_type = "Benzina", euro_norm = "Euro 4", model = octavia)
+            eng_oct_33 = Engine(name="1.6 FSI", power_hp = 115, displacement_cc = 1598, fuel_type = "Benzina", euro_norm = "Euro 4", model = octavia)
+            eng_oct_34 = Engine(name="1.6 MPI", power_hp = 102, displacement_cc = 1595, fuel_type = "Benzina", euro_norm = "Euro 4", model = octavia)
+            eng_oct_35 = Engine(name="1.4 MPI", power_hp = 75, displacement_cc = 1390, fuel_type = "Benzina", euro_norm = "Euro 4", model = octavia)
+
+            # Octavia 1
+            eng_oct_36 = Engine(name="1.9 TDI", power_hp = 90, displacement_cc = 1896, fuel_type = "Diesel", euro_norm = "Euro 3", model = octavia)
+            eng_oct_37 = Engine(name="1.9 TDI", power_hp = 110, displacement_cc = 1896, fuel_type = "Diesel", euro_norm = "Euro 3", model = octavia)
+            eng_oct_38 = Engine(name="1.9 TDI", power_hp = 101, displacement_cc = 1896, fuel_type = "Diesel", euro_norm = "Euro 4", model = octavia)
+            eng_oct_39 = Engine(name="1.9 TDI", power_hp = 131, displacement_cc = 1896, fuel_type = "Diesel", euro_norm = "Euro 3", model = octavia)
+            eng_oct_40 = Engine(name="1.8 T", power_hp = 180, displacement_cc = 1781, fuel_type = "Benzina", euro_norm = "Euro 4", model = octavia)
+            eng_oct_41 = Engine(name="1.8 T", power_hp = 150, displacement_cc = 1781, fuel_type = "Benzina", euro_norm = "Euro 4", model = octavia)
+            eng_oct_42 = Engine(name="1.6 MPI", power_hp = 102, displacement_cc = 1595, fuel_type = "Benzina", euro_norm = "Euro 4", model = octavia)
+
+            db.session.add_all([
+                eng_oct_1, eng_oct_2, eng_oct_3, eng_oct_4, eng_oct_5, eng_oct_6, eng_oct_7, eng_oct_8,
+                eng_oct_9, eng_oct_10, eng_oct_11, eng_oct_12, eng_oct_13, eng_oct_14, eng_oct_15, eng_oct_16,
+                eng_oct_17, eng_oct_18, eng_oct_19, eng_oct_20, eng_oct_21, eng_oct_22, eng_oct_23, eng_oct_24,
+                eng_oct_25, eng_oct_26, eng_oct_27, eng_oct_28, eng_oct_29, eng_oct_30, eng_oct_31, eng_oct_32,
+                eng_oct_33, eng_oct_34, eng_oct_35, eng_oct_36, eng_oct_37, eng_oct_38, eng_oct_39, eng_oct_40,
+                eng_oct_41, eng_oct_42
+            ])
+
+        superb = Model.query.filter_by(name="Superb").first()
+        if superb:
+            # Superb 3 and Superb 4
+            eng_sup_1 = Engine(name="2.0 TDI", power_hp = 150, displacement_cc = 1968, fuel_type = "Diesel", euro_norm = "Euro 6", model = superb)
+            eng_sup_2 = Engine(name="2.0 TDI", power_hp = 190, displacement_cc = 1968, fuel_type = "Diesel", euro_norm = "Euro 6", model = superb)
+            eng_sup_3 = Engine(name="2.0 TDI Evo", power_hp = 200, displacement_cc = 1968, fuel_type = "Diesel", euro_norm = "Euro 6", model = superb)
+            eng_sup_4 = Engine(name="2.0 TSI 4x4", power_hp = 280, displacement_cc = 1984, fuel_type = "Benzina", euro_norm = "Euro 6", model = superb)
+            eng_sup_5 = Engine(name="2.0 TSI 4x4", power_hp = 272, displacement_cc = 1984, fuel_type = "Benzina", euro_norm = "Euro 6", model = superb)
+            eng_sup_6 = Engine(name="1.5 TSI", power_hp = 150, displacement_cc = 1498, fuel_type = "Benzina", euro_norm = "Euro 6", model = superb)
+            eng_sup_7 = Engine(name="1.4 TSI iV", power_hp = 218, displacement_cc = 1395, fuel_type = "Hybrid", euro_norm = "Euro 6", model = superb)
+            eng_sup_8 = Engine(name="1.6 TDI", power_hp = 120, displacement_cc = 1598, fuel_type = "Diesel", euro_norm = "Euro 6", model = superb)
+            eng_sup_9 = Engine(name="2.0 TSI", power_hp = 220, displacement_cc = 1984, fuel_type = "Benzina", euro_norm = "Euro 6", model = superb)
+
+            # Superb 2
+            eng_sup_10 = Engine(name="2.0 TDI", power_hp = 170, displacement_cc = 1968, fuel_type = "Diesel", euro_norm = "Euro 5", model = superb)
+            eng_sup_11 = Engine(name="2.0 TDI", power_hp = 140, displacement_cc = 1968, fuel_type = "Diesel", euro_norm = "Euro 5", model = superb)
+            eng_sup_12 = Engine(name="3.6 FSI V6", power_hp = 260, displacement_cc = 3597, fuel_type = "Benzina", euro_norm = "Euro 5", model = superb)
+            eng_sup_13 = Engine(name="1.8 TSI", power_hp = 160, displacement_cc = 1798, fuel_type = "Benzina", euro_norm = "Euro 5", model = superb)
+            eng_sup_14 = Engine(name="1.6 TDI", power_hp = 105, displacement_cc = 1598, fuel_type = "Diesel", euro_norm = "Euro 5", model = superb)
+            eng_sup_15 = Engine(name="1.4 TSI", power_hp = 125, displacement_cc = 1390, fuel_type = "Benzina", euro_norm = "Euro 5", model = superb)
+
+            # Superb 1
+            eng_sup_16 = Engine(name = "1.9 TDI", power_hp = 131, displacement_cc = 1896, fuel_type = "Diesel", euro_norm = "Euro 3", model = superb)
+            eng_sup_17 = Engine(name="2.5 TDI V6", power_hp = 163, displacement_cc = 2496, fuel_type = "Diesel", euro_norm = "Euro 4", model = superb)
+            eng_sup_18 = Engine(name="1.8 T", power_hp = 150, displacement_cc = 1781, fuel_type = "Benzina", euro_norm = "Euro 4", model = superb)
+            eng_sup_19 = Engine(name="2.8 V6", power_hp = 193, displacement_cc = 2771, fuel_type = "Benzina", euro_norm = "Euro 4", model = superb)
+            eng_sup_20 = Engine(name="1.9 TDI", power_hp = 101, displacement_cc = 1896, fuel_type = "Diesel", euro_norm = "Euro 3", model = superb)
+
+            db.session.add_all([
+                eng_sup_1, eng_sup_2, eng_sup_3, eng_sup_4, eng_sup_5,
+                eng_sup_6, eng_sup_7, eng_sup_8, eng_sup_9, eng_sup_10,
+                eng_sup_11, eng_sup_12, eng_sup_13, eng_sup_14, eng_sup_15,
+                eng_sup_16, eng_sup_17, eng_sup_18, eng_sup_19, eng_sup_20
+            ])
+
+        db.session.commit()
 
 if __name__ == '__main__':
     seed()
