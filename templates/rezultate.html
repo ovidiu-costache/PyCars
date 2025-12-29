@@ -1,36 +1,53 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h2>Rezultatele Cautarii</h2>
-    <a href="/"><< Inapoi la cautare</a>
-    <br><br>
-
-    <!-- un inceput pentru pagina cu rezultate -->
-    <table border="1" width="100%" cellpadding="10">
-        <tr style="background-color: #ddd;">
-            <th>Poza</th>
-            <th>Titlu Anunt</th>
-            <th>Masina</th>
-            <th>An</th>
-            <th>Motor</th>
-            <th>Pret</th>
-            <th>Actiune</th>
-        </tr>
+    
+    <div class="container">
         
-        {% for anunt in anunturi %}
-        <tr>
-            <td><img src="https://cdn-icons-png.flaticon.com/512/3202/3202926.png" width="50"></td>
-            <td>{{ anunt.title }}</td>
-            <td>{{ anunt.engine.model.make.name }} {{ anunt.engine.model.name }}</td>
-            <td>{{ anunt.year }}</td>
-            <td>{{ anunt.engine.name }} ({{ anunt.engine.power_hp }} CP)</td>
-            <td style="color: red; font-weight: bold;">{{ anunt.price }} €</td>
-            <td><a href="/anunt/{{ anunt.id }}"><button>Detalii</button></a></td>
-        </tr>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h1 style="border-left: 5px solid #2ecc71; padding-left: 10px;">
+                Rezultatele Cautarii
+            </h1>
+            
+            <a href="/" style="background-color: #7f8c8d; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">
+                &laquo; Inapoi la filtre
+            </a>
+        </div>
+
+        {% if anunturi %}
+            
+            <div class="grid-anunturi">
+                
+                {% for anunt in anunturi %}
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=500&q=60" class="card-img-top">
+                    
+                    <div class="card-body">
+                        <h3 class="card-title">{{ anunt.title }}</h3>
+                        
+                        <div class="card-details">
+                            <span>{{ anunt.year }}</span> | 
+                            <span>{{ anunt.engine.power_hp }} CP</span> | 
+                            <span>{{ anunt.engine.fuel_type }}</span>
+                        </div>
+                        
+                        <div class="card-price">{{ anunt.price }} €</div>
+                        
+                        <br>
+                        <a href="/anunt/{{ anunt.id }}" class="btn-detalii">Vezi detalii</a>
+                    </div>
+                </div>
+                {% endfor %}
+
+            </div>
+
         {% else %}
-        <tr>
-            <td colspan="7" align="center">Nu am gasit nicio masina cu specificatiile astea :(</td>
-        </tr>
-        {% endfor %}
-    </table>
+            <div style="text-align: center; padding: 50px; background-color: white; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                <h2 style="color: #000000ff;"> Nu am gasit niciun rezultat :(</h2>
+                <br>
+            </div>
+        {% endif %}
+
+    </div>
+
 {% endblock %}
