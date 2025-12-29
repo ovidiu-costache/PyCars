@@ -4,9 +4,10 @@
 <div class="container">
     <div style="max-width: 400px; margin: 50px auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
         
-        <h2 style="text-align: center; color: #2c3e50; margin-bottom: 20px;">Autentificare</h2>
+        <h2 style="text-align: center; color: #2c3e50; margin-bottom: 20px;">Creează Cont</h2>
 
-        <!-- aici se verifica daca parola sau mailul este gresit si afiseaza un mesaj rosu pentru eroare si verde daca totul a mers bine-->
+        <!-- Aici setez culorile mesajului in functie de rezultat
+             daca introduc datele corecte si se poate sa imi creez un cont atunci o sa fie un mesaj verde, altfel cu rosu -->
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
@@ -27,30 +28,30 @@
             {% endif %}
         {% endwith %}
 
-        <!-- "POST" asta e pentru date sensibile (parola,mail etc.) -->
-        <form method="POST" action="/login">
+        <form method="POST" action="/register">
+            
+            <div style="margin-bottom: 15px;">
+                <label>Numele Tau</label>
+                <input type="text" name="name" required placeholder="Ex: Ion Popescu" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+            </div>
+
             <div style="margin-bottom: 15px;">
                 <label>Email</label>
-                <input type="email" name="email" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                <input type="email" name="email" required placeholder="email@exemplu.ro" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
             </div>
 
             <div style="margin-bottom: 20px;">
                 <label>Parola</label>
-                <input type="password" name="password" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                <input type="password" name="password" required placeholder="Alege o parola sigura" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
             </div>
 
             <button type="submit" class="btn-post" style="width: 100%; padding: 12px; font-size: 16px; border: none; cursor: pointer;">
-                Intră în cont
+                Inregistreaza-te
             </button>
         </form>
         
-        <!-- contul adminului de test -->
-        <p style="text-align: center; margin-top: 15px; font-size: 0.9em; color: gray;">
-            Cont admin demo: admin@pycars.ro / admin123
-        </p>
-
         <p style="text-align: center; margin-top: 15px;">
-            Nu ai cont? <a href="/register" style="color: #3498db; text-decoration: none;">Creează unul acum</a>
+            Ai deja cont? <a href="/login" style="color: #3498db; text-decoration: none;">Autentifica-te aici</a>
         </p>
     </div>
 </div>

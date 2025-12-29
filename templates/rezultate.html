@@ -3,15 +3,50 @@
 {% block content %}
     
     <div class="container">
-        
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h1 style="border-left: 5px solid #2ecc71; padding-left: 10px;">
-                Rezultatele Cautarii
-            </h1>
+            <h1 style="border-left: 5px solid #2ecc71; padding-left: 10px;">Rezultatele Cautarii</h1>
+            <a href="/" class="btn-post" style="background-color: #7f8c8d; text-decoration: none;">&laquo; Filtre Noi</a>
+        </div>
+
+        <div style="background: white; padding: 15px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: flex; justify-content: flex-end; align-items: center;">
             
-            <a href="/" style="background-color: #7f8c8d; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">
-                &laquo; Inapoi la filtre
-            </a>
+            <form action="/cautare" method="GET" style="display: flex; align-items: center; gap: 10px; margin: 0;">
+                
+                <!-- aici practic iau url si-l impart in bucati (filtrele puse de mine de pe pagina home) si le fac hidden
+                     pentru ca daca vreau sa mai sortez o data, imi trebuie si filtrele initiale
+                     key: model -> value: BMW -->
+                {% for key, value in request.args.items() %}
+                    {% if key != 'sortare' %}
+                        <input type="hidden" name="{{ key }}" value="{{ value }}">
+                    {% endif %}
+                {% endfor %}
+
+                <label style="font-weight: bold; color: #555;">Sortează după:</label>
+                
+                <!-- folosim niste javascript "onchange" care cum modifici o sortare, se aplica
+                     este in url un element de sortare pe acela il urmeaza -->
+                <select name="sortare" onchange="this.form.submit()" style="padding: 8px; border: 1px solid #ddd; border-radius: 4px; background-color: #f8f9fa;">
+                    <option value="0">Relevanță (Standard)</option>
+                    
+                    <!-- aici dupa ce am selectat la sortare, sus la url se va pune acel mod de sortare
+                         sortare="pret_cresc", iar eu fac ca acel argument sa ramana setat folosind "selected" -->
+                    <option value="pret_cresc" {% if request.args.get('sortare') == 'pret_cresc' %}selected{% endif %}>
+                        Preț: Crescător
+                    </option>
+                    <option value="pret_desc" {% if request.args.get('sortare') == 'pret_desc' %}selected{% endif %}>
+                        Preț: Descrescător
+                    </option>
+                    <option value="an_desc" {% if request.args.get('sortare') == 'an_desc' %}selected{% endif %}>
+                        An: Cele mai noi
+                    </option>
+                    <option value="an_cresc" {% if request.args.get('sortare') == 'an_cresc' %}selected{% endif %}>
+                        An: Cele mai vechi
+                    </option>
+                    <option value="km_cresc" {% if request.args.get('sortare') == 'km_cresc' %}selected{% endif %}>
+                        Kilometraj: Mic la Mare
+                    </option>
+                </select>
+            </form>
         </div>
 
         {% if anunturi %}
