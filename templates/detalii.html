@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- detaliile unui anunt si cum poti sa iei legatura cu selleru -->
+    <div style="background-color: #f9f9f9; padding: 20px; border: 2px dashed black;">
+        <h1>{{ anunt.title }}</h1>
+        <p style="font-size: 20px; color: green;"><b>Pret: {{ anunt.price }} EURO</b></p>
+        
+        <hr>
+        
+        <h3>Specificatii Tehnice:</h3>
+        <ul>
+            <li><b>Marca:</b> {{ anunt.engine.model.make.name }}</li>
+            <li><b>Model:</b> {{ anunt.engine.model.name }}</li>
+            <li><b>An:</b> {{ anunt.year }}</li>
+            <li><b>Motor:</b> {{ anunt.engine.name }} ({{ anunt.engine.displacement_cc }} cm3)</li>
+            <li><b>Putere:</b> {{ anunt.engine.power_hp }} Cai Putere</li>
+            <li><b>Combustibil:</b> {{ anunt.engine.fuel_type }}</li>
+            <li><b>Kilometraj:</b> {{ anunt.mileage }} km</li>
+            <li><b>Norma Poluare:</b> {{ anunt.engine.euro_norm }}</li>
+        </ul>
+
+        <hr>
+        <h3>Descriere vanzator:</h3>
+        <p>{{ anunt.description }}</p>
+        
+        <br>
+        <div style="border: 1px solid red; padding: 10px; display: inline-block;">
+            <b>Contact Vanzator:</b> {{ anunt.phone }}<br>
+            (Spune ca ai vazut anuntul pe PyCars)
+        </div>
+        
+        <br><br>
+        <button onclick="salveazaLaFavorite()">Adauga la Favorite</button>
+        <a href="/"><button>Inapoi la prima pagina</button></a>
+    </div>
+{% endblock %}

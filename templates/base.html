@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PyCars - Vanzari Auto</title>
+    
+    <!-- partea cu url_for e functia din Flask care imi cauta automat fisiere
+         in folderul "static" in cazul meu -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="/" class="logo">
+            <img src="{{ url_for('static', filename='img.jpg') }}" alt="Logo PyCars">
+            <span>PyCars</span>
+        </a>
+
+        <div class="nav-links">
+            <a href="/">Acasa</a>
+            <a href="/login">Autentificare</a>
+            <a href="/adauga" class="btn-post">Posteaza Anunt</a>
+        </div>
+    </nav>
+
+    <!--am folosit ca schelet base.html ca sa nu scriu de 999 ori meniul,
+        astfel fiecare pagina va fi mai usor de facut-->
+    <div class="main-content">
+        {% block content %}{% endblock %}
+    </div>
+
+    <footer>
+        <p>Proiect realizat de PyCarsTeam - 2026</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+</html>

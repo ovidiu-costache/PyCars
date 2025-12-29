@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Rezultatele Cautarii</h2>
+    <a href="/"><< Inapoi la cautare</a>
+    <br><br>
+
+    <!-- un inceput pentru pagina cu rezultate -->
+    <table border="1" width="100%" cellpadding="10">
+        <tr style="background-color: #ddd;">
+            <th>Poza</th>
+            <th>Titlu Anunt</th>
+            <th>Masina</th>
+            <th>An</th>
+            <th>Motor</th>
+            <th>Pret</th>
+            <th>Actiune</th>
+        </tr>
+        
+        {% for anunt in anunturi %}
+        <tr>
+            <td><img src="https://cdn-icons-png.flaticon.com/512/3202/3202926.png" width="50"></td>
+            <td>{{ anunt.title }}</td>
+            <td>{{ anunt.engine.model.make.name }} {{ anunt.engine.model.name }}</td>
+            <td>{{ anunt.year }}</td>
+            <td>{{ anunt.engine.name }} ({{ anunt.engine.power_hp }} CP)</td>
+            <td style="color: red; font-weight: bold;">{{ anunt.price }} €</td>
+            <td><a href="/anunt/{{ anunt.id }}"><button>Detalii</button></a></td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="7" align="center">Nu am gasit nicio masina cu specificatiile astea :(</td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
