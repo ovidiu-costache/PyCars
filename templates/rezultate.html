@@ -49,14 +49,19 @@
             </form>
         </div>
 
+        <!-- daca gasesc anunturi -->
         {% if anunturi %}
             
             <div class="grid-anunturi">
                 
+                <!-- le fac cardulete cu informatii -->
                 {% for anunt in anunturi %}
                 <div class="card">
-                    <img src="https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=500&q=60" class="card-img-top">
-                    
+                    {% if anunt.image_list %}
+                        <img src="{{ url_for('static', filename='/uploads/' + anunt.image_list) }}" class="card-img-top">
+                    {% else %}
+                        <img src="https://www.thepoc.ro/img/2019/01/imagine-superba-masina.jpg" class="card-img-top">
+                    {% endif %}
                     <div class="card-body">
                         <h3 class="card-title">{{ anunt.title }}</h3>
                         

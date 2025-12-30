@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div style="max-width: 600px; margin: 30px auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+        
+        <h2 style="text-align: center; color: #2c3e50; margin-bottom: 20px;">Adauga un Anunt Nou</h2>
+
+        <!-- mesaj in caz ca ceva nu merge bine -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="/adauga" enctype="multipart/form-data">
+            
+            <div style="margin-bottom: 15px;">
+                <label style="font-weight: bold;">Titlu Anunt</label>
+                <input type="text" name="titlu" required placeholder="Ex: BMW Seria 3 Impecabil" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+            </div>
+
+            <!-- iau fiecare model si motoarele posibile -->
+            <div style="margin-bottom: 15px;">
+                <label style="font-weight: bold;">Alege Modelul & Motorizarea</label>
+                <select name="motor_id" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                    <option value="" disabled selected>-- Selecteaza din lista --</option>
+                    {% for motor in motoare %}
+                        <option value="{{ motor.id }}">
+                            {{ motor.model.make.name }} {{ motor.model.name }} - {{ motor.name }} ({{ motor.power_hp }} CP)
+                        </option>
+                    {% endfor %}
+                </select>
+                <small style="color: grey;">*Momentan poti vinde doar modelele existente in baza noastra de date.</small>
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                <div style="flex: 1;">
+                    <label>Pret (€)</label>
+                    <input type="number" name="pret" required placeholder="5000" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 5px;">
+                </div>
+                <div style="flex: 1;">
+                    <!-- am facut o functie sa verifice anul pe care-l introduc -->
+                <label>An</label>
+                <input type="number" id="an" name="an" oninput="verificaAn()" required placeholder="2015" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 5px;">
+                <small id="msg-an" style="color: red; display: none;">An invalid (1900 - 2026)!</small>
+            </div>
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                <div style="flex: 1;">
+                    <label>Kilometraj</label>
+                    <input type="number" name="km" required placeholder="150000" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 5px;">
+                </div>
+                <div style="flex: 1;">
+                    <label>Cutie Viteze</label>
+                    <select name="cutie" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 5px;">
+                        <option value="Manuala">Manuala</option>
+                        <option value="Automata">Automata</option>
+                    </select>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <!-- aici am pus o limita de caractere de 270 pentru descriere -->
+                <label>Descriere Detaliata</label>
+                <textarea name="descriere" rows="4" oninput="verificareChars(this)" maxlength="270" oninput="" placeholder="Scrie aici despre starea mașinii, dotări, defecte..." style="width: 100%; resize: none; padding: 10px; border: 1px solid #ddd; border-radius: 5px;"></textarea>
+            
+                <div style="text-align: right;">
+                    <small id="cur-caractere" style="color: grey;">0 / 270</small>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <!-- aici am facut astfel incat daca scrii altceva decat o cifra sa o stearga imediat si max 10 cifre -->
+                <label>Telefon Contact</label>
+                <input type="tel" id="telefon" name="telefon" oninput="this.value = this.value.replace(/[^0-9]/g, ''); verificaTelefon()" required placeholder="07xx xxx xxx" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;" maxlength="10">
+                
+                <small id="msg-telefon" style="color: red; display: none;">Numarul trebuie sa aiba exact 10 cifre!</small>
+            </div>
+
+            <!-- partea pentru incarcat poza -->
+            <div style="margin-bottom: 20px; background: #f9f9f9; padding: 15px; border-radius: 5px;">
+                <label style="font-weight: bold; color: #2980b9;">Incarca o poza</label>
+                <input type="file" name="poza" accept="image/*" style="margin-top: 10px;">
+                <br>
+                <small>Formate acceptate: jpg, png, jpeg</small>
+            </div>
+
+            <!-- public anuntul -->
+            <button type="submit" class="btn-post" style="width: 100%; padding: 12px; font-size: 16px; border: none; cursor: pointer;">
+                Publica Anuntul
+            </button>
+            
+            <!-- nu mai public -->
+            <div style="text-align: center; margin-top: 15px;">
+                <a href="/" style="color: #7f8c8d; text-decoration: none;">Renunta</a>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<script>
+    function verificaTelefon() {
+        // luam elementul din pagina
+        var inputTel = document.getElementById("telefon");
+        var mesajEroare = document.getElementById("msg-telefon");
+        var valoare = inputTel.value;
+
+        // verificam lungimea
+        if (valoare.length !== 10) {
+            // daca nu e bine
+            inputTel.style.borderColor = "red";
+            mesajEroare.style.display = "block"; // afiseaza textul
+            mesajEroare.innerText = "Numarul trebuie sa aiba exact 10 cifre! (Acum are " + valoare.length + ")";
+        } else {
+            // daca e bine
+            inputTel.style.borderColor = "#2ecc71"; // verde
+            mesajEroare.style.display = "none"; // ascunde textul
+        }
+    }
+
+    function verificaAn() {
+        var inputAn = document.getElementById("an");
+        var mesajEroare = document.getElementById("msg-an");
+        var an = parseInt(inputAn.value); // transformam textul in numar
+        var anCurent = new Date().getFullYear(); // luam anul curent
+
+        // verificam sa fie un an realist (ex: intre 1900 si anul curent)
+        if (an < 1900 || an > anCurent) {
+            inputAn.style.borderColor = "red";
+            mesajEroare.style.display = "block";
+        } else {
+            inputAn.style.borderColor = "#2ecc71"; // verde
+            mesajEroare.style.display = "none";
+        }
+    }
+
+    function verificareChars(text) {
+        var lungime = text.value.length;
+        var afisare = document.getElementById("cur-caractere");
+
+        // aici rescriu caracterele curente dupa fiecare litera/cifra scrisa
+        afisare.innerText = lungime + " / 270";
+    }
+</script>
+
+{% endblock %}

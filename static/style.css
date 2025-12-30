@@ -5,6 +5,7 @@
     box-sizing: border-box;
 }
 
+/* aspect pentru butoane si meniuri universale */
 body {
     background-color: #f4f4f9; /* un gri foarte deschis */
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;

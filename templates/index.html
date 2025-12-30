@@ -15,6 +15,7 @@
                         <!-- Aici fac criteriile de cautare a masinilor -->
                         <div>
                             <label>Marca</label>
+                            <!-- fac un tab cu optiuni pentru marci -->
                             <select name="marca" id="selectMarca" style="width: 100%;">
                                 <option value="0">Toate Marcile</option>
                                 {% for marca in marci %}
@@ -25,6 +26,7 @@
 
                         <div>
                             <label>Model</label>
+                            <!-- fac un tab cu optiuni pentru modele -->
                             <select name="model" id="selectModel" style="width: 100%;">
                                 <option value="0">Toate Modelele</option>
                                 {% for model in modele %}
@@ -37,6 +39,7 @@
 
                         <div>
                             <label>Combustibil</label>
+                            <!-- tip de combustibil -->
                             <select name="combustibil" style="width: 100%;">
                                 <option value="0">Oricare</option>
                                 {% for comb in combustibili %}
@@ -47,6 +50,7 @@
 
                         <div>
                             <label>Pret (€)</label>
+                            <!-- interval de pret -->
                             <div style="display: flex; gap: 5px;">
                                 <input type="number" name="pret_min" placeholder="Min" min="0" style="width: 50%;">
                                 <input type="number" name="pret_max" placeholder="Max" min="0" style="width: 50%;">
@@ -55,6 +59,7 @@
 
                         <div>
                             <label>An Fabricatie</label>
+                            <!-- interval de ani -->
                             <div style="display: flex; gap: 5px;">
                                 <input type="number" name="an_min" placeholder="Min" min="1900" style="width: 50%;">
                                 <input type="number" name="an_max" placeholder="Max" min="1900" style="width: 50%;">
@@ -63,6 +68,7 @@
 
                         <div>
                             <label>Kilometraj</label>
+                            <!-- interval de kilometraj -->
                             <div style="display: flex; gap: 5px;">
                                 <input type="number" name="km_min" placeholder="Min" min="0" style="width: 50%;">
                                 <input type="number" name="km_max" placeholder="Max" min="0" style="width: 50%;">
@@ -86,6 +92,7 @@
         <div class="grid-anunturi">
             {% for anunt in anunturi %}
             <div class="card">
+                <!-- cardul pentru anunturi -->
                 {% if anunt.image_list %}
                     <img src="{{ url_for('static', filename='uploads/' + anunt.image_list) }}" class="card-img-top" alt="Poza masina">
                 {% else %}
