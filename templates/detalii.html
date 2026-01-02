@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- detaliile unui anunt si cum poti sa iei legatura cu selleru -->
+<!-- l am facut sa arate mai bine ca asa se atrag clientii -->
+    <div class="container">
+        <div style="margin-bottom: 20px;">
+            <a href="javascript:history.back()" style="text-decoration: none; color: #7f8c8d;">&laquo; Inapoi la lista de anunturi</a>
+        </div>
+        <div style="background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+        
+        <div style="border-bottom: 2px solid #ecf0f1; padding-bottom: 20px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+            <h1 style="color: #2c3e50; margin: 0; font-size: 2rem;">{{ anunt.title }}</h1>
+            
+            <h2 style="color: #e74c3c; font-weight: bold; margin: 0; font-size: 2rem;">{{ anunt.price }} €</h2>
+        </div>
+
+        <div style="display: flex; gap: 30px; flex-wrap: wrap;">
+
+            <!-- daca am poza pentru anuntul respectiv, altfel pun o poza default -->
+            <div style="flex: 1; min-width: 300px;">
+                {% if anunt.image_list %}
+                    <img src="{{ url_for('static', filename='uploads/' + anunt.image_list) }}" style="width: 100%; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);" alt="Poza Masina">
+                {% else %}
+                    <img src="https://www.thepoc.ro/img/2019/01/imagine-superba-masina.jpg" style="width: 100%; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);" alt="Poza Standard">
+                {% endif %}
+            </div>
+
+            <!-- am facut si un tabel cu date frumos -->
+            <div style="flex: 1; min-width: 300px;">
+                <h3 style="color: #34495e; margin-bottom: 15px; border-left: 4px solid #3498db; padding-left: 10px;">
+                    Specificații Tehnice
+                </h3>
+
+                <table style="width: 100%; border-collapse: collapse;">
+                    <tr style="border-bottom: 1px solid #eee;">
+                        <td class="allinfo-cartype">Marca</td>
+                        <td class="allinfo-car">{{ anunt.engine.model.make.name }}</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #eee;">
+                        <td class="allinfo-cartype">Model</td>
+                        <td class="allinfo-car">{{ anunt.engine.model.name }}</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #eee;">
+                        <td class="allinfo-cartype">An Fabricatie</td>
+                        <td class="allinfo-car">{{ anunt.year }}</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #eee;">
+                        <td class="allinfo-cartype">Kilometraj</td>
+                        <td class="allinfo-car">{{ anunt.mileage }} km</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #eee;">
+                        <td class="allinfo-cartype">Motorizare</td>
+                        <td class="allinfo-car">{{ anunt.engine.name }} {{ anunt.engine.displacement_cc }} cm³</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #eee;">
+                        <td class="allinfo-cartype">Putere</td>
+                        <td class="allinfo-car">{{ anunt.engine.power_hp }} hp</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #eee;">
+                        <td class="allinfo-cartype">Combustibil</td>
+                        <td class="allinfo-car">{{ anunt.engine.fuel_type }}</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #eee;">
+                        <td class="allinfo-cartype">Cutie Viteze</td>
+                        <td class="allinfo-car">{{ anunt.gearbox_type }}</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #eee;">
+                        <td class="allinfo-cartype">Norma Poluare</td>
+                        <td class="allinfo-car">{{ anunt.engine.euro_norm }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- descrieri si info de contact -->
+        <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
+        <div style="margin-bottom: 30px;">
+            <h3 style="color: #34495e; margin-bottom: 10px;">Descriere</h3>
+            <div style="background-color: #f9f9f9; padding: 20px; border-radius: 5px; color: #555; line-height: 1.6;">
+                {{ anunt.description }}
+            </div>
+        </div>
+
+        <div style="background-color: #e0f7fa; padding: 20px; border-radius: 8px; border-left: 5px solid #00acc1; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+            <div>
+                <h3 style="margin: 0; color: #006064;">Contacteaza Vanzatorul</h3>
+                <p style="margin: 5px 0 0 0; color: #00838f;">Vanzator: <b>{{ anunt.owner.name }}</b></p>
+                <p style="margin: 5px 0 0 0; color: #00838f;">Phone number: <b>{{ anunt.phone }}</b></p>
+            </div>
+        </div>
+
+        <br>
+        <p style="text-align: right; color: #95a5a6; font-size: 0.9em;">
+            Anunț postat la data: {{ anunt.created_at.strftime('%d-%m-%Y') }}
+        </p>
+
+    </div>
+{% endblock %}

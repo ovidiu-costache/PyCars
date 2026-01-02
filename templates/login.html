@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div style="max-width: 400px; margin: 50px auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+        
+        <h2 style="text-align: center; color: #2c3e50; margin-bottom: 20px;">Autentificare</h2>
+
+        <!-- aici se verifica daca parola sau mailul este gresit si afiseaza un mesaj rosu pentru eroare si verde daca totul a mers bine-->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    
+                    {% if category == 'error' %}
+                        {% set bg_color = '#ffcccc' %} 
+                        {% set text_color = '#cc0000' %}
+                    {% else %}
+                        {% set bg_color = '#d4edda' %} 
+                        {% set text_color = '#155724' %}
+                    {% endif %}
+
+                    <div style="background-color: {{ bg_color }}; color: {{ text_color }}; padding: 15px; border-radius: 5px; margin-bottom: 20px; text-align: center; border: 1px solid {{ text_color }};">
+                        {{ message }}
+                    </div>
+
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- "POST" asta e pentru date sensibile (parola,mail etc.) -->
+        <form method="POST" action="/login">
+            <div style="margin-bottom: 15px;">
+                <label>Email</label>
+                <input type="email" name="email" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <label>Parola</label>
+                <input type="password" name="password" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+            </div>
+
+            <button type="submit" class="btn-post" style="width: 100%; padding: 12px; font-size: 16px; border: none; cursor: pointer;">
+                Intră în cont
+            </button>
+        </form>
+        
+        <!-- contul adminului de test -->
+        <p style="text-align: center; margin-top: 15px; font-size: 0.9em; color: gray;">
+            Cont admin demo: admin@pycars.ro / admin123
+        </p>
+
+        <p style="text-align: center; margin-top: 15px;">
+            Nu ai cont? <a href="/register" style="color: #3498db; text-decoration: none;">Creează unul acum</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

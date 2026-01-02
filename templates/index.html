@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    
+    <div class="hero-section">
+        <div class="container">
+            <h1>Gaseste-ti masina potrivita</h1>
+            <p>Cele mai bune oferte verificate din Romania</p>
+
+            <div class="search-box">
+                <form action="/cautare" method="GET">
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; text-align: left;">
+                        
+                        <!-- Aici fac criteriile de cautare a masinilor -->
+                        <div>
+                            <label>Marca</label>
+                            <!-- fac un tab cu optiuni pentru marci -->
+                            <select name="marca" id="selectMarca" style="width: 100%;">
+                                <option value="0">Toate Marcile</option>
+                                {% for marca in marci %}
+                                    <option value="{{ marca.id }}">{{ marca.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div>
+                            <label>Model</label>
+                            <!-- fac un tab cu optiuni pentru modele -->
+                            <select name="model" id="selectModel" style="width: 100%;">
+                                <option value="0">Toate Modelele</option>
+                                {% for model in modele %}
+                                    <option value="{{ model.id }}" data-make="{{ model.make_id }}">
+                                        {{ model.name }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div>
+                            <label>Combustibil</label>
+                            <!-- tip de combustibil -->
+                            <select name="combustibil" style="width: 100%;">
+                                <option value="0">Oricare</option>
+                                {% for comb in combustibili %}
+                                    <option value="{{ comb }}">{{ comb }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div>
+                            <label>Pret (€)</label>
+                            <!-- interval de pret -->
+                            <div style="display: flex; gap: 5px;">
+                                <input type="number" name="pret_min" placeholder="Min" min="0" style="width: 50%;">
+                                <input type="number" name="pret_max" placeholder="Max" min="0" style="width: 50%;">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label>An Fabricatie</label>
+                            <!-- interval de ani -->
+                            <div style="display: flex; gap: 5px;">
+                                <input type="number" name="an_min" placeholder="Min" min="1900" style="width: 50%;">
+                                <input type="number" name="an_max" placeholder="Max" min="1900" style="width: 50%;">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label>Kilometraj</label>
+                            <!-- interval de kilometraj -->
+                            <div style="display: flex; gap: 5px;">
+                                <input type="number" name="km_min" placeholder="Min" min="0" style="width: 50%;">
+                                <input type="number" name="km_max" placeholder="Max" min="0" style="width: 50%;">
+                            </div>
+                        </div>
+
+                    </div>
+                    
+                    <br>
+                    <button type="submit" class="btn-search" style="width: 100%;">CAUTA MASINA</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- afisam cele 4 anunturi ca un "taste test" -->
+    <div class="container">
+        <h2 style="margin-bottom: 20px; border-left: 5px solid #e74c3c; padding-left: 10px;">
+            Anunturi Recomandate
+        </h2>
+        <div class="grid-anunturi">
+            {% for anunt in anunturi %}
+            <div class="card">
+                <!-- cardul pentru anunturi -->
+                {% if anunt.image_list %}
+                    <img src="{{ url_for('static', filename='uploads/' + anunt.image_list) }}" class="card-img-top" alt="Poza masina">
+                {% else %}
+                    <img src="https://www.thepoc.ro/img/2019/01/imagine-superba-masina.jpg" class="card-img-top" alt="Poza masina">
+                {% endif %}
+                <div class="card-body">
+                    <h3 class="card-title">{{ anunt.title }}</h3>
+                    <div class="card-details">
+                        <span>{{ anunt.year }}</span> | 
+                        <span>{{ anunt.engine.power_hp }} CP</span> | 
+                        <span>{{ anunt.engine.fuel_type }}</span>
+                    </div>
+                    <div class="card-price">{{ anunt.price }} €</div>
+                    <br>
+                    <a href="/anunt/{{ anunt.id }}" class="btn-detalii">Vezi detalii</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}

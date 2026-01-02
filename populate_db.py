@@ -1,13 +1,22 @@
 from app import app
 from database import db
-from models import Make, Model, Engine, Listing
+from models import Make, Model, Engine, Listing, User
+from werkzeug.security import generate_password_hash
 
 def seed():
     with app.app_context():
-        db.session.query(Listing).delete()
-        db.session.query(Engine).delete()
-        db.session.query(Model).delete()
-        db.session.query(Make).delete()
+        db.drop_all()
+        db.create_all()
+
+        admin_user = User(
+            email = "admin@pycars.ro",
+            password_hash = generate_password_hash("admin123", method = 'pbkdf2:sha256'),
+            name = "Admin PyCars",
+            phone = "0729379058"
+        )
+
+        db.session.add(admin_user)
+        db.session.commit()
 
         skoda = Make(name = "Skoda")
         db.session.add(skoda)
@@ -50,22 +59,10 @@ def seed():
         models_dacia = ["Logan", "Duster", "Sandero", "Bigster", "Docker", "Jogger", "Lodgy", "Spring", "Solenza", "Supernova", "1310"]
         for m in models_dacia:
             db.session.add(Model(name = m, make = dacia))
-            
-        alfa = Make(name = "Alfa Romeo")
-        db.session.add(alfa)
-        models_alfa = ["Giulia", "Giullietta", "Stelvio", "159"]
-        for m in models_alfa:
-            db.session.add(Model(name = m, make = alfa))
-
-        citroen = Make(name = "Citroen")
-        db.session.add(citroen)
-        models_citroen = ["C3", "C4", "C4 Cactus", "C5", "DS3", "DS4", "DS5"]
-        for m in models_citroen:
-            db.session.add(Model(name = m, make = citroen))
 
         ford = Make(name = "Ford")
         db.session.add(ford)
-        models_ford = ["Focus", "Mondeo", "Fiesta", "Kuga", "C-MAX", "Mustang", "Puma", "Transit"]
+        models_ford = ["Focus", "Mondeo", "Fiesta", "Kuga", "Mustang", "Puma", "Transit"]
         for m in models_ford:
             db.session.add(Model(name = m, make = ford))
 
@@ -77,7 +74,7 @@ def seed():
 
         hyundai = Make(name = "Hyundai")
         db.session.add(hyundai)
-        models_hyundai = ["Elantra", "i10", "i20", "i30", "i40", "IONIQ", "Konda", "Santa Fe", "Tucson"]
+        models_hyundai = ["Elantra", "i10", "i20", "i30", "i40", "IONIQ", "Kona", "Santa Fe", "Tucson"]
         for m in models_hyundai:
             db.session.add(Model(name = m, make = hyundai))
 
@@ -104,12 +101,6 @@ def seed():
         models_seat = ["Leon", "Ibiza", "Alhambra", "Altea", "Arona", "Ateca", "Exeo", "Tarraco", "Toledo"]
         for m in models_seat:
             db.session.add(Model(name = m, make = seat))
-
-        peugeot = Make(name = "Peugeot")
-        db.session.add(peugeot)
-        models_peugeot = ["207", "208", "2008", "301", "307", "308", "3008", "407", "408", "4007", "4008", "508", "5008", "Partner"]
-        for m in models_peugeot:
-            db.session.add(Model(name = m, make = peugeot))
 
         porsche = Make(name = "Porsche")
         db.session.add(porsche)
@@ -885,6 +876,493 @@ def seed():
             eng_merc_44 = Engine(name = "ML 250 BlueTEC", power_hp = 204, displacement_cc = 2143, fuel_type = "Diesel", euro_norm = "Euro 6", model = ml)
 
             db.session.add_all([eng_merc_42, eng_merc_43, eng_merc_44])
+
+        megane = Model.query.filter_by(name = "Megane").first()
+        if megane:
+            # Megane 4
+            eng_meg_1 = Engine(name = "1.5 dCi", power_hp = 110, displacement_cc = 1461, fuel_type = "Diesel", euro_norm = "Euro 6", model = megane)
+            eng_meg_2 = Engine(name = "1.5 dCi", power_hp = 115, displacement_cc = 1461, fuel_type = "Diesel", euro_norm = "Euro 6", model = megane)
+            eng_meg_3 = Engine(name = "1.6 dCi", power_hp = 130, displacement_cc = 1598, fuel_type = "Diesel", euro_norm = "Euro 6", model = megane)
+            eng_meg_4 = Engine(name = "1.3 TCe", power_hp = 140, displacement_cc = 1332, fuel_type = "Benzina", euro_norm = "Euro 6", model = megane)
+            eng_meg_5 = Engine(name = "1.2 TCe", power_hp = 130, displacement_cc = 1197, fuel_type = "Benzina", euro_norm = "Euro 6", model = megane)
+            eng_meg_6 = Engine(name = "1.8 RS", power_hp = 280, displacement_cc = 1798, fuel_type = "Benzina", euro_norm = "Euro 6", model = megane)
+
+            # Megane 3
+            eng_meg_7 = Engine(name = "1.5 dCi", power_hp = 110, displacement_cc = 1461, fuel_type = "Diesel", euro_norm = "Euro 5", model = megane)
+            eng_meg_8 = Engine(name = "1.5 dCi", power_hp = 90, displacement_cc = 1461, fuel_type = "Diesel", euro_norm = "Euro 5", model = megane)
+            eng_meg_9 = Engine(name = "1.9 dCi", power_hp = 130, displacement_cc = 1870, fuel_type = "Diesel", euro_norm = "Euro 5", model = megane)
+            eng_meg_10 = Engine(name = "1.6 16V", power_hp = 110, displacement_cc = 1598, fuel_type = "Benzina", euro_norm = "Euro 5", model = megane)
+            eng_meg_11 = Engine(name = "2.0 RS", power_hp = 265, displacement_cc = 1998, fuel_type = "Benzina", euro_norm = "Euro 5", model = megane)
+
+            # Megane 2
+            eng_meg_12 = Engine(name = "1.5 dCi", power_hp = 85, displacement_cc = 1461, fuel_type = "Diesel", euro_norm = "Euro 4", model = megane)
+            eng_meg_13 = Engine(name = "1.9 dCi", power_hp = 120, displacement_cc = 1870, fuel_type = "Diesel", euro_norm = "Euro 3", model = megane)
+            eng_meg_14 = Engine(name = "1.6 16V", power_hp = 113, displacement_cc = 1598, fuel_type = "Benzina", euro_norm = "Euro 4", model = megane)
+
+            db.session.add_all([
+                eng_meg_1, eng_meg_2, eng_meg_3, eng_meg_4, eng_meg_5,
+                eng_meg_6, eng_meg_7, eng_meg_8, eng_meg_9, eng_meg_10,
+                eng_meg_11, eng_meg_12, eng_meg_13, eng_meg_14
+            ])
+
+        clio = Model.query.filter_by(name = "Clio").first()
+        if clio:
+            # Clio 5
+            eng_clio_1 = Engine(name = "1.0 TCe", power_hp = 100, displacement_cc = 999, fuel_type = "Benzina", euro_norm = "Euro 6", model = clio)
+            eng_clio_2 = Engine(name = "1.5 dCi", power_hp = 85, displacement_cc = 1461, fuel_type = "Diesel", euro_norm = "Euro 6", model = clio)
+            eng_clio_3 = Engine(name = "1.0 SCe", power_hp = 65, displacement_cc = 999, fuel_type = "Benzina", euro_norm = "Euro 6", model = clio)
+
+            # Clio 4
+            eng_clio_4 = Engine(name = "1.5 dCi", power_hp = 90, displacement_cc = 1461, fuel_type = "Diesel", euro_norm = "Euro 6", model = clio)
+            eng_clio_5 = Engine(name = "1.5 dCi", power_hp = 75, displacement_cc = 1461, fuel_type = "Diesel", euro_norm = "Euro 5", model = clio)
+            eng_clio_6 = Engine(name = "0.9 TCe", power_hp = 90, displacement_cc = 898, fuel_type = "Benzina", euro_norm = "Euro 6", model = clio)
+            eng_clio_7 = Engine(name = "1.2 16V", power_hp = 75, displacement_cc = 1149, fuel_type = "Benzina", euro_norm = "Euro 5", model = clio)
+            eng_clio_8 = Engine(name = "1.6 RS", power_hp = 200, displacement_cc = 1618, fuel_type = "Benzina", euro_norm = "Euro 6", model = clio)
+
+            # Clio 3
+            eng_clio_9 = Engine(name = "1.5 dCi", power_hp = 85, displacement_cc = 1461, fuel_type = "Diesel", euro_norm = "Euro 4", model = clio)
+            eng_clio_10 = Engine(name = "1.4 16V", power_hp = 98, displacement_cc = 1390, fuel_type = "Benzina", euro_norm = "Euro 4", model = clio)
+
+            db.session.add_all([
+                eng_clio_1, eng_clio_2, eng_clio_3, eng_clio_4, eng_clio_5,
+                eng_clio_6, eng_clio_7, eng_clio_8, eng_clio_9, eng_clio_10
+            ])
+
+        talisman = Model.query.filter_by(name = "Talisman").first()
+        if talisman:
+            eng_tal_1 = Engine(name = "1.6 dCi", power_hp = 160, displacement_cc = 1598, fuel_type = "Diesel", euro_norm = "Euro 6", model = talisman)
+            eng_tal_2 = Engine(name = "1.6 dCi", power_hp = 130, displacement_cc = 1598, fuel_type = "Diesel", euro_norm = "Euro 6", model = talisman)
+            eng_tal_3 = Engine(name = "1.5 dCi", power_hp = 110, displacement_cc = 1461, fuel_type = "Diesel", euro_norm = "Euro 6", model = talisman)
+            eng_tal_4 = Engine(name = "2.0 dCi", power_hp = 200, displacement_cc = 1997, fuel_type = "Diesel", euro_norm = "Euro 6", model = talisman)
+            eng_tal_5 = Engine(name = "1.6 TCe", power_hp = 200, displacement_cc = 1618, fuel_type = "Benzina", euro_norm = "Euro 6", model = talisman)
+
+            db.session.add_all([eng_tal_1, eng_tal_2, eng_tal_3, eng_tal_4, eng_tal_5])
+
+        laguna = Model.query.filter_by(name = "Laguna").first()
+        if laguna:
+            # Laguna 3
+            eng_lag_1 = Engine(name = "2.0 dCi", power_hp = 150, displacement_cc = 1995, fuel_type = "Diesel", euro_norm = "Euro 5", model = laguna)
+            eng_lag_2 = Engine(name = "2.0 dCi", power_hp = 175, displacement_cc = 1995, fuel_type = "Diesel", euro_norm = "Euro 5", model = laguna)
+            eng_lag_3 = Engine(name = "1.5 dCi", power_hp = 110, displacement_cc = 1461, fuel_type = "Diesel", euro_norm = "Euro 5", model = laguna)
+            eng_lag_4 = Engine(name = "2.0 16V", power_hp = 140, displacement_cc = 1997, fuel_type = "Benzina", euro_norm = "Euro 5", model = laguna)
+
+            # Laguna 2
+            eng_lag_5 = Engine(name = "1.9 dCi", power_hp = 120, displacement_cc = 1870, fuel_type = "Diesel", euro_norm = "Euro 3", model = laguna)
+            eng_lag_6 = Engine(name = "1.9 dCi", power_hp = 130, displacement_cc = 1870, fuel_type = "Diesel", euro_norm = "Euro 4", model = laguna)
+            eng_lag_7 = Engine(name = "1.8 16V", power_hp = 120, displacement_cc = 1783, fuel_type = "Benzina", euro_norm = "Euro 3", model = laguna)
+
+            db.session.add_all([eng_lag_1, eng_lag_2, eng_lag_3, eng_lag_4, eng_lag_5, eng_lag_6, eng_lag_7])
+
+        kadjar = Model.query.filter_by(name = "Kadjar").first()
+        if kadjar:
+            eng_kadj_1 = Engine(name = "1.5 dCi", power_hp = 110, displacement_cc = 1461, fuel_type = "Diesel", euro_norm = "Euro 6", model = kadjar)
+            eng_kadj_2 = Engine(name = "1.6 dCi", power_hp = 130, displacement_cc = 1598, fuel_type = "Diesel", euro_norm = "Euro 6", model = kadjar)
+            eng_kadj_3 = Engine(name = "1.3 TCe", power_hp = 140, displacement_cc = 1332, fuel_type = "Benzina", euro_norm = "Euro 6", model = kadjar)
+            eng_kadj_4 = Engine(name = "1.2 TCe", power_hp = 130, displacement_cc = 1197, fuel_type = "Benzina", euro_norm = "Euro 6", model = kadjar)
+
+            db.session.add_all([eng_kadj_1, eng_kadj_2, eng_kadj_3, eng_kadj_4])
+
+        logan = Model.query.filter_by(name = "Logan").first()
+        if logan:
+            # Logan 3
+            eng_log_1 = Engine(name = "1.0 ECO-G", power_hp = 100, displacement_cc = 999, fuel_type = "GPL/CNG", euro_norm = "Euro 6", model = logan)
+            eng_log_2 = Engine(name = "1.0 SCe", power_hp = 65, displacement_cc = 999, fuel_type = "Benzina", euro_norm = "Euro 6", model = logan)
+
+            # Logan 2
+            eng_log_3 = Engine(name = "0.9 TCe", power_hp = 90, displacement_cc = 898, fuel_type = "Benzina", euro_norm = "Euro 5", model = logan)
+            eng_log_4 = Engine(name = "1.5 dCi", power_hp = 90, displacement_cc = 1461, fuel_type = "Diesel", euro_norm = "Euro 5", model = logan)
+            eng_log_5 = Engine(name = "1.5 dCi", power_hp = 75, displacement_cc = 1461, fuel_type = "Diesel", euro_norm = "Euro 5", model = logan)
+            eng_log_6 = Engine(name = "1.2 16V", power_hp = 75, displacement_cc = 1149, fuel_type = "Benzina", euro_norm = "Euro 5", model = logan)
+
+            # Logan 1
+            eng_log_7 = Engine(name = "1.4 MPI", power_hp = 75, displacement_cc = 1390, fuel_type = "Benzina", euro_norm = "Euro 4", model = logan)
+            eng_log_8 = Engine(name = "1.6 MPI", power_hp = 90, displacement_cc = 1598, fuel_type = "Benzina", euro_norm = "Euro 4", model = logan)
+            eng_log_9 = Engine(name = "1.5 dCi", power_hp = 85, displacement_cc = 1461, fuel_type = "Diesel", euro_norm = "Euro 4", model = logan)
+            eng_log_10 = Engine(name = "1.5 dCi", power_hp = 65, displacement_cc = 1461, fuel_type = "Diesel", euro_norm = "Euro 3", model = logan)
+            eng_log_11 = Engine(name = "1.6 16V", power_hp = 105, displacement_cc = 1598, fuel_type = "Benzina", euro_norm = "Euro 4", model = logan)
+
+            db.session.add_all([
+                eng_log_1, eng_log_2, eng_log_3, eng_log_4, eng_log_5,
+                eng_log_6, eng_log_7, eng_log_8, eng_log_9, eng_log_10, eng_log_11
+            ])
+
+        duster = Model.query.filter_by(name = "Duster").first()
+        if duster:
+            # Duster 2
+            eng_dus_1 = Engine(name = "1.5 dCi 4x4", power_hp = 115, displacement_cc = 1461, fuel_type = "Diesel", euro_norm = "Euro 6", model = duster)
+            eng_dus_2 = Engine(name = "1.3 TCe", power_hp = 130, displacement_cc = 1332, fuel_type = "Benzina", euro_norm = "Euro 6", model = duster)
+            eng_dus_3 = Engine(name = "1.3 TCe 4x4", power_hp = 150, displacement_cc = 1332, fuel_type = "Benzina", euro_norm = "Euro 6", model = duster)
+
+            # Duster 1
+            eng_dus_4 = Engine(name = "1.5 dCi 4x4", power_hp = 110, displacement_cc = 1461, fuel_type = "Diesel", euro_norm = "Euro 5", model = duster)
+            eng_dus_5 = Engine(name = "1.6 16V", power_hp = 105, displacement_cc = 1598, fuel_type = "Benzina", euro_norm = "Euro 5", model = duster)
+            eng_dus_6 = Engine(name = "1.5 dCi", power_hp = 90, displacement_cc = 1461, fuel_type = "Diesel", euro_norm = "Euro 5", model = duster)
+
+            db.session.add_all([eng_dus_1, eng_dus_2, eng_dus_3, eng_dus_4, eng_dus_5, eng_dus_6])
+
+        sandero = Model.query.filter_by(name = "Sandero").first()
+        if sandero:
+            eng_san_1 = Engine(name = "0.9 TCe Stepway", power_hp = 90, displacement_cc = 898, fuel_type = "Benzina", euro_norm = "Euro 5", model = sandero)
+            eng_san_2 = Engine(name = "1.5 dCi", power_hp = 75, displacement_cc = 1461, fuel_type = "Diesel", euro_norm = "Euro 5", model = sandero)
+            eng_san_3 = Engine(name = "1.5 dCi", power_hp = 90, displacement_cc = 1461, fuel_type = "Diesel", euro_norm = "Euro 5", model = sandero)
+            eng_san_4 = Engine(name = "1.0 ECO-G Stepway", power_hp = 100, displacement_cc = 999, fuel_type = "GPL/CNG", euro_norm = "Euro 6", model = sandero)
+
+            db.session.add_all([eng_san_1, eng_san_2, eng_san_3, eng_san_4])
+
+        spring = Model.query.filter_by(name = "Spring").first()
+        if spring:
+            eng_spr_1 = Engine(name = "Electric 45", power_hp = 45, displacement_cc = 0, fuel_type = "Electric", euro_norm = "Zero", model = spring)
+            eng_spr_2 = Engine(name = "Electric 65", power_hp = 65, displacement_cc = 0, fuel_type = "Electric", euro_norm = "Zero", model = spring)
+
+            db.session.add_all([eng_spr_1, eng_spr_2])
+
+        jogger = Model.query.filter_by(name = "Jogger").first()
+        if jogger:
+            eng_jog_1 = Engine(name = "Hybrid 140", power_hp = 140, displacement_cc = 1598, fuel_type = "Hybrid", euro_norm = "Euro 6", model = jogger)
+            eng_jog_2 = Engine(name = "ECO-G 100", power_hp = 100, displacement_cc = 999, fuel_type = "GPL/CNG", euro_norm = "Euro 6", model = jogger)
+            eng_jog_3 = Engine(name = "TCe 110", power_hp = 110, displacement_cc = 999, fuel_type = "Benzina", euro_norm = "Euro 6", model = jogger)
+
+            db.session.add_all([eng_jog_1, eng_jog_2, eng_jog_3])
+
+        bigster = Model.query.filter_by(name = "Bigster").first()
+        if bigster:
+            eng_big_1 = Engine(name = "Hybrid 155", power_hp = 155, displacement_cc = 1798, fuel_type = "Hybrid", euro_norm = "Euro 6", model = bigster)
+            eng_big_2 = Engine(name = "TCe 140", power_hp = 140, displacement_cc = 1199, fuel_type = "Mild Hybrid", euro_norm = "Euro 6", model = bigster)
+            eng_big_3 = Engine(name = "ECO-G 140", power_hp = 140, displacement_cc = 1199, fuel_type = "GPL/CNG", euro_norm = "Euro 6", model = bigster)
+            eng_big_4 = Engine(name = "TCe 130 4x4", power_hp = 130, displacement_cc = 1199, fuel_type = "Benzina", euro_norm = "Euro 6", model = bigster)
+
+            db.session.add_all([eng_big_1, eng_big_2, eng_big_3, eng_big_4])
+
+        db.session.commit()
+
+        focus = Model.query.filter_by(name = "Focus").first()
+        if focus:
+            # Focus 4
+            eng_foc_1 = Engine(name = "1.0 EcoBoost", power_hp = 125, displacement_cc = 999, fuel_type = "Benzina", euro_norm = "Euro 6", model = focus)
+            eng_foc_2 = Engine(name = "1.5 EcoBlue", power_hp = 120, displacement_cc = 1499, fuel_type = "Diesel", euro_norm = "Euro 6", model = focus)
+            eng_foc_3 = Engine(name = "1.0 EcoBoost mHEV", power_hp = 155, displacement_cc = 999, fuel_type = "Mild Hybrid", euro_norm = "Euro 6", model = focus)
+
+            # Focus 3
+            eng_foc_4 = Engine(name = "1.6 TDCi", power_hp = 115, displacement_cc = 1560, fuel_type = "Diesel", euro_norm = "Euro 5", model = focus)
+            eng_foc_5 = Engine(name = "1.0 EcoBoost", power_hp = 100, displacement_cc = 999, fuel_type = "Benzina", euro_norm = "Euro 5", model = focus)
+            eng_foc_6 = Engine(name = "1.5 TDCi", power_hp = 120, displacement_cc = 1499, fuel_type = "Diesel", euro_norm = "Euro 6", model = focus)
+            eng_foc_7 = Engine(name = "1.6 Ti-VCT", power_hp = 105, displacement_cc = 1596, fuel_type = "Benzina", euro_norm = "Euro 5", model = focus)
+            eng_foc_8 = Engine(name = "2.0 TDCi", power_hp = 140, displacement_cc = 1997, fuel_type = "Diesel", euro_norm = "Euro 5", model = focus)
+            eng_foc_9 = Engine(name = "2.0 TDCi ST", power_hp = 185, displacement_cc = 1997, fuel_type = "Diesel", euro_norm = "Euro 6", model = focus)
+
+            # Focus 2
+            eng_foc_10 = Engine(name = "1.6 TDCi", power_hp = 90, displacement_cc = 1560, fuel_type = "Diesel", euro_norm = "Euro 4", model = focus)
+            eng_foc_11 = Engine(name = "1.6 TDCi", power_hp = 109, displacement_cc = 1560, fuel_type = "Diesel", euro_norm = "Euro 4", model = focus)
+            eng_foc_12 = Engine(name = "1.6 16V", power_hp = 100, displacement_cc = 1596, fuel_type = "Benzina", euro_norm = "Euro 4", model = focus)
+            eng_foc_13 = Engine(name = "1.8 TDCi", power_hp = 115, displacement_cc = 1753, fuel_type = "Diesel", euro_norm = "Euro 4", model = focus)
+
+            db.session.add_all([
+                eng_foc_1, eng_foc_2, eng_foc_3, eng_foc_4, eng_foc_5,
+                eng_foc_6, eng_foc_7, eng_foc_8, eng_foc_9, eng_foc_10,
+                eng_foc_11, eng_foc_12, eng_foc_13
+            ])
+
+        mondeo = Model.query.filter_by(name = "Mondeo").first()
+        if mondeo:
+            # Mondeo 5
+            eng_mon_1 = Engine(name = "2.0 TDCi", power_hp = 150, displacement_cc = 1997, fuel_type = "Diesel", euro_norm = "Euro 6", model = mondeo)
+            eng_mon_2 = Engine(name = "2.0 TDCi", power_hp = 180, displacement_cc = 1997, fuel_type = "Diesel", euro_norm = "Euro 6", model = mondeo)
+            eng_mon_3 = Engine(name = "2.0 Hybrid", power_hp = 187, displacement_cc = 1999, fuel_type = "Hybrid", euro_norm = "Euro 6", model = mondeo)
+            eng_mon_4 = Engine(name = "1.5 EcoBoost", power_hp = 160, displacement_cc = 1499, fuel_type = "Benzina", euro_norm = "Euro 6", model = mondeo)
+
+            # Mondeo 4
+            eng_mon_5 = Engine(name = "2.0 TDCi", power_hp = 140, displacement_cc = 1997, fuel_type = "Diesel", euro_norm = "Euro 5", model = mondeo)
+            eng_mon_6 = Engine(name = "1.6 TDCi", power_hp = 115, displacement_cc = 1560, fuel_type = "Diesel", euro_norm = "Euro 5", model = mondeo)
+            eng_mon_7 = Engine(name = "2.0 TDCi", power_hp = 163, displacement_cc = 1997, fuel_type = "Diesel", euro_norm = "Euro 5", model = mondeo)
+            eng_mon_8 = Engine(name = "1.8 TDCi", power_hp = 125, displacement_cc = 1753, fuel_type = "Diesel", euro_norm = "Euro 4", model = mondeo)
+
+            db.session.add_all([eng_mon_1, eng_mon_2, eng_mon_3, eng_mon_4, eng_mon_5, eng_mon_6, eng_mon_7, eng_mon_8])
+
+        fiesta = Model.query.filter_by(name = "Fiesta").first()
+        if fiesta:
+            eng_fie_1 = Engine(name = "1.0 EcoBoost", power_hp = 100, displacement_cc = 999, fuel_type = "Benzina", euro_norm = "Euro 6", model = fiesta)
+            eng_fie_2 = Engine(name = "1.25 MPI", power_hp = 82, displacement_cc = 1242, fuel_type = "Benzina", euro_norm = "Euro 5", model = fiesta)
+            eng_fie_3 = Engine(name = "1.5 TDCi", power_hp = 75, displacement_cc = 1499, fuel_type = "Diesel", euro_norm = "Euro 6", model = fiesta)
+            eng_fie_4 = Engine(name = "1.4 TDCi", power_hp = 68, displacement_cc = 1399, fuel_type = "Diesel", euro_norm = "Euro 4", model = fiesta)
+            eng_fie_5 = Engine(name = "1.0 MPI", power_hp = 80, displacement_cc = 999, fuel_type = "Benzina", euro_norm = "Euro 6", model = fiesta)
+            eng_fie_6 = Engine(name = "1.5 EcoBoost ST", power_hp = 200, displacement_cc = 1497, fuel_type = "Benzina", euro_norm = "Euro 6", model = fiesta)
+
+            db.session.add_all([eng_fie_1, eng_fie_2, eng_fie_3, eng_fie_4, eng_fie_5, eng_fie_6])
+
+        kuga = Model.query.filter_by(name = "Kuga").first()
+        if kuga:
+            # Kuga 3
+            eng_kug_1 = Engine(name = "2.5 PHEV", power_hp = 225, displacement_cc = 2488, fuel_type = "Hybrid Plug-in", euro_norm = "Euro 6", model = kuga)
+            eng_kug_2 = Engine(name = "1.5 EcoBoost", power_hp = 150, displacement_cc = 1499, fuel_type = "Benzina", euro_norm = "Euro 6", model = kuga)
+            eng_kug_3 = Engine(name = "2.0 EcoBlue mHEV", power_hp = 150, displacement_cc = 1995, fuel_type = "Mild Hybrid", euro_norm = "Euro 6", model = kuga)
+
+            # Kuga 2
+            eng_kug_4 = Engine(name = "2.0 TDCi 4x4", power_hp = 150, displacement_cc = 1997, fuel_type = "Diesel", euro_norm = "Euro 6", model = kuga)
+            eng_kug_5 = Engine(name = "2.0 TDCi 4x4", power_hp = 180, displacement_cc = 1997, fuel_type = "Diesel", euro_norm = "Euro 6", model = kuga)
+            eng_kug_6 = Engine(name = "2.0 TDCi", power_hp = 140, displacement_cc = 1997, fuel_type = "Diesel", euro_norm = "Euro 5", model = kuga)
+
+            # Kuga 1
+            eng_kug_7 = Engine(name = "2.0 TDCi 4x4", power_hp = 136, displacement_cc = 1997, fuel_type = "Diesel", euro_norm = "Euro 4", model = kuga)
+
+            db.session.add_all([eng_kug_1, eng_kug_2, eng_kug_3, eng_kug_4, eng_kug_5, eng_kug_6, eng_kug_7])
+
+        puma = Model.query.filter_by(name = "Puma").first()
+        if puma:
+            eng_pum_1 = Engine(name = "1.0 EcoBoost mHEV", power_hp = 125, displacement_cc = 999, fuel_type = "Mild Hybrid", euro_norm = "Euro 6", model = puma)
+            eng_pum_2 = Engine(name = "1.0 EcoBoost mHEV", power_hp = 155, displacement_cc = 999, fuel_type = "Mild Hybrid", euro_norm = "Euro 6", model = puma)
+            eng_pum_3 = Engine(name = "1.5 EcoBoost ST", power_hp = 200, displacement_cc = 1497, fuel_type = "Benzina", euro_norm = "Euro 6", model = puma)
+            eng_pum_4 = Engine(name = "1.0 EcoBoost", power_hp = 125, displacement_cc = 999, fuel_type = "Benzina", euro_norm = "Euro 6", model = puma)
+
+            db.session.add_all([eng_pum_1, eng_pum_2, eng_pum_3, eng_pum_4])
+
+        mustang = Model.query.filter_by(name = "Mustang").first()
+        if mustang:
+            eng_mus_1 = Engine(name = "5.0 V8 GT", power_hp = 450, displacement_cc = 5038, fuel_type = "Benzina", euro_norm = "Euro 6", model = mustang)
+            eng_mus_2 = Engine(name = "2.3 EcoBoost", power_hp = 317, displacement_cc = 2261, fuel_type = "Benzina", euro_norm = "Euro 6", model = mustang)
+            eng_mus_3 = Engine(name = "5.0 V8 Mach 1", power_hp = 460, displacement_cc = 5038, fuel_type = "Benzina", euro_norm = "Euro 6", model = mustang)
+
+            db.session.add_all([eng_mus_1, eng_mus_2, eng_mus_3])
+
+        transit = Model.query.filter_by(name = "Transit").first()
+        if transit:
+            eng_tra_1 = Engine(name = "2.0 EcoBlue", power_hp = 130, displacement_cc = 1995, fuel_type = "Diesel", euro_norm = "Euro 6", model = transit)
+            eng_tra_2 = Engine(name = "2.0 EcoBlue", power_hp = 170, displacement_cc = 1995, fuel_type = "Diesel", euro_norm = "Euro 6", model = transit)
+            eng_tra_3 = Engine(name = "2.2 TDCi", power_hp = 125, displacement_cc = 2198, fuel_type = "Diesel", euro_norm = "Euro 5", model = transit)
+            eng_tra_4 = Engine(name = "2.2 TDCi", power_hp = 100, displacement_cc = 2198, fuel_type = "Diesel", euro_norm = "Euro 4", model = transit)
+            eng_tra_5 = Engine(name = "2.4 TDCi", power_hp = 115, displacement_cc = 2402, fuel_type = "Diesel", euro_norm = "Euro 4", model = transit)
+
+            db.session.add_all([eng_tra_1, eng_tra_2, eng_tra_3, eng_tra_4, eng_tra_5])
+
+        accord = Model.query.filter_by(name = "Accord").first()
+        if accord:
+            # Accord 8
+            eng_acc_1 = Engine(name = "2.0 i-VTEC", power_hp = 156, displacement_cc = 1997, fuel_type = "Benzina", euro_norm = "Euro 5", model = accord)
+            eng_acc_2 = Engine(name = "2.2 i-DTEC", power_hp = 150, displacement_cc = 2199, fuel_type = "Diesel", euro_norm = "Euro 5", model = accord)
+            eng_acc_3 = Engine(name = "2.2 i-DTEC Type-S", power_hp = 180, displacement_cc = 2199, fuel_type = "Diesel", euro_norm = "Euro 5", model = accord)
+            eng_acc_4 = Engine(name = "2.4 i-VTEC", power_hp = 201, displacement_cc = 2354, fuel_type = "Benzina", euro_norm = "Euro 5", model = accord)
+
+            # Accord 7
+            eng_acc_5 = Engine(name = "2.0 i-VTEC", power_hp = 155, displacement_cc = 1998, fuel_type = "Benzina", euro_norm = "Euro 4", model = accord)
+            eng_acc_6 = Engine(name = "2.2 i-CTDi", power_hp = 140, displacement_cc = 2204, fuel_type = "Diesel", euro_norm = "Euro 4", model = accord)
+
+            db.session.add_all([eng_acc_1, eng_acc_2, eng_acc_3, eng_acc_4, eng_acc_5, eng_acc_6])
+
+        civic = Model.query.filter_by(name = "Civic").first()
+        if civic:
+            # Civic 10
+            eng_civ_1 = Engine(name = "1.5 VTEC Turbo", power_hp = 182, displacement_cc = 1498, fuel_type = "Benzina", euro_norm = "Euro 6", model = civic)
+            eng_civ_2 = Engine(name = "1.0 VTEC Turbo", power_hp = 129, displacement_cc = 988, fuel_type = "Benzina", euro_norm = "Euro 6", model = civic)
+            eng_civ_3 = Engine(name = "2.o Type R", power_hp = 320, displacement_cc = 1996, fuel_type = "Benzina", euro_norm = "Euro 6", model = civic)
+
+            # Civic 9
+            eng_civ_4 = Engine(name = "1.8 i-VTEC", power_hp = 142, displacement_cc = 1798, fuel_type = "Benzina", euro_norm = "Euro 5", model = civic)
+            eng_civ_5 = Engine(name = "1.6 i-DTEC", power_hp = 120, displacement_cc = 1597, fuel_type = "Diesel", euro_norm = "Euro 5", model = civic)
+
+            # Civic 8
+            eng_civ_6 = Engine(name = "1.8 i-VTEC", power_hp = 140, displacement_cc = 1799, fuel_type = "Benzina", euro_norm = "Euro 4", model = civic)
+            eng_civ_7 = Engine(name = "2.2 i-CTDi", power_hp = 140, displacement_cc = 2204, fuel_type = "Diesel", euro_norm = "Euro 4", model = civic)
+            eng_civ_8 = Engine(name = "Type R (2.0)", power_hp = 201, displacement_cc = 1998, fuel_type = "Benzina", euro_norm = "Euro 4", model = civic)
+
+            db.session.add_all([eng_civ_1, eng_civ_2, eng_civ_3, eng_civ_4, eng_civ_5, eng_civ_6, eng_civ_7, eng_civ_8])
+
+        crv = Model.query.filter_by(name = "CR-V").first()
+        if crv:
+            # CR-V 5
+            eng_crv_1 = Engine(name = "2.0 i-MMD Hybrid", power_hp = 184, displacement_cc = 1993, fuel_type = "Hybrid", euro_norm = "Euro 6", model = crv)
+            eng_crv_2 = Engine(name = "1.5 VTEC Turbo", power_hp = 193, displacement_cc = 1498, fuel_type = "Benzina", euro_norm = "Euro 6", model = crv)
+
+            # CR-V 4
+            eng_crv_3 = Engine(name = "1.6 i-DTEC", power_hp = 160, displacement_cc = 1597, fuel_type = "Diesel", euro_norm = "Euro 6", model = crv)
+            eng_crv_4 = Engine(name = "1.6 i-DTEC", power_hp = 120, displacement_cc = 1597, fuel_type = "Diesel", euro_norm = "Euro 5", model = crv)
+            eng_crv_5 = Engine(name = "2.0 i-VTEC", power_hp = 155, displacement_cc = 1997, fuel_type = "Benzina", euro_norm = "Euro 5", model = crv)
+            eng_crv_6 = Engine(name = "2.2 i-DTEC", power_hp = 150, displacement_cc = 2199, fuel_type = "Diesel", euro_norm = "Euro 5", model = crv)
+
+            # CR-V 3
+            eng_crv_7 = Engine(name = "2.0 i-VTEC", power_hp = 150, displacement_cc = 1997, fuel_type = "Benzina", euro_norm = "Euro 4", model = crv)
+            eng_crv_8 = Engine(name = "2.2 i-CTDi", power_hp = 140, displacement_cc = 2204, fuel_type = "Diesel", euro_norm = "Euro 4", model = crv)
+
+            db.session.add_all([eng_crv_1, eng_crv_2, eng_crv_3, eng_crv_4, eng_crv_5, eng_crv_6, eng_crv_7, eng_crv_8])
+
+        hrv = Model.query.filter_by(name = "HR-V").first()
+        if hrv:
+            # HR-V 2
+            eng_hrv_1 = Engine(name = "1.5 i-VTEC", power_hp = 130, displacement_cc = 1498, fuel_type = "Benzina", euro_norm = "Euro 6", model = hrv)
+            eng_hrv_2 = Engine(name = "1.6 i-DTEC", power_hp = 120, displacement_cc = 1597, fuel_type = "Diesel", euro_norm = "Euro 6", model = hrv)
+            eng_hrv_3 = Engine(name = "1.5 VTEC Turbo", power_hp = 182, displacement_cc = 1498, fuel_type = "Benzina", euro_norm = "Euro 6", model = hrv)
+
+            # HR-V 1
+            eng_hrv_4 = Engine(name = "1.6 i-VTEC", power_hp = 105, displacement_cc = 1590, fuel_type = "Benzina", euro_norm = "Euro 3", model = hrv)
+            eng_hrv_5 = Engine(name = "1.6 i-VTEC V-TEC", power_hp = 124, displacement_cc = 1590, fuel_type = "Benzina", euro_norm = "Euro 3", model = hrv)
+
+            db.session.add_all([eng_hrv_1, eng_hrv_2, eng_hrv_3, eng_hrv_4, eng_hrv_5])
+
+        elantra = Model.query.filter_by(name = "Elantra").first()
+        if elantra:
+            # Elantra 7
+            eng_ela_1 = Engine(name = "1.6 MPI", power_hp = 123, displacement_cc = 1598, fuel_type = "Benzina", euro_norm = "Euro 6", model = elantra)
+
+            # Elantra 6
+            eng_ela_2 = Engine(name = "1.6 MPI", power_hp = 128, displacement_cc = 1591, fuel_type = "Benzina", euro_norm = "Euro 6", model = elantra)
+            eng_ela_3 = Engine(name = "1.6 CRDi", power_hp = 136, displacement_cc = 1582, fuel_type = "Diesel", euro_norm = "Euro 6", model = elantra)
+
+            # Elantra 5
+            eng_ela_4 = Engine(name = "1.6 MPI", power_hp = 132, displacement_cc = 1591, fuel_type = "Benzina", euro_norm = "Euro 5", model = elantra)
+            eng_ela_5 = Engine(name = "1.8 MPI", power_hp = 150, displacement_cc = 1797, fuel_type = "Benzina", euro_norm = "Euro 5", model = elantra)
+
+            db.session.add_all([eng_ela_1, eng_ela_2, eng_ela_3, eng_ela_4, eng_ela_5])
+
+        i10 = Model.query.filter_by(name = "i10").first()
+        if i10:
+            eng_i10_1 = Engine(name = "1.0 MPI", power_hp = 67, displacement_cc = 998, fuel_type = "Benzina", euro_norm = "Euro 6", model = i10)
+            eng_i10_2 = Engine(name = "1.2 MPI", power_hp = 84, displacement_cc = 1248, fuel_type = "Benzina", euro_norm = "Euro 6", model = i10)
+            eng_i10_3 = Engine(name = "1.0 T-GDi N-Line", power_hp = 100, displacement_cc = 998, fuel_type = "Benzina", euro_norm = "Euro 6", model = i10)
+
+            db.session.add_all([eng_i10_1, eng_i10_2, eng_i10_3])
+
+        i20 = Model.query.filter_by(name = "i20").first()
+        if i20:
+            # i20 III
+            eng_i20_1 = Engine(name = "1.0 T-GDi mHEV", power_hp = 100, displacement_cc = 998, fuel_type = "Mild Hybrid", euro_norm = "Euro 6", model = i20)
+            eng_i20_2 = Engine(name = "1.2 MPI", power_hp = 84, displacement_cc = 1197, fuel_type = "Benzina", euro_norm = "Euro 6", model = i20)
+
+            # i20 II
+            eng_i20_3 = Engine(name = "1.2 MPI", power_hp = 75, displacement_cc = 1248, fuel_type = "Benzina", euro_norm = "Euro 6", model = i20)
+            eng_i20_4 = Engine(name = "1.1 CRDi", power_hp = 75, displacement_cc = 1120, fuel_type = "Diesel", euro_norm = "Euro 5", model = i20)
+            eng_i20_5 = Engine(name = "1.4 CRDi", power_hp = 90, displacement_cc = 1396, fuel_type = "Diesel", euro_norm = "Euro 6", model = i20)
+
+            db.session.add_all([eng_i20_1, eng_i20_2, eng_i20_3, eng_i20_4, eng_i20_5])
+
+        i30 = Model.query.filter_by(name = "i30").first()
+        if i30:
+            # i30 III
+            eng_i30_1 = Engine(name = "1.4 T-GDi", power_hp = 140, displacement_cc = 1353, fuel_type = "Benzina", euro_norm = "Euro 6", model = i30)
+            eng_i30_2 = Engine(name = "1.5 T-GDi mHEV", power_hp = 160, displacement_cc = 1482, fuel_type = "Mild Hybrid", euro_norm = "Euro 6", model = i30)
+            eng_i30_3 = Engine(name = "1.6 CRDi", power_hp = 110, displacement_cc = 1582, fuel_type = "Diesel", euro_norm = "Euro 6", model = i30)
+            eng_i30_4 = Engine(name = "2.0 T-GDi N", power_hp = 280, displacement_cc = 1998, fuel_type = "Benzina", euro_norm = "Euro 6", model = i30)
+
+            # i30 II
+            eng_i30_5 = Engine(name = "1.4 MPI", power_hp = 100, displacement_cc = 1396, fuel_type = "Benzina", euro_norm = "Euro 5", model = i30)
+            eng_i30_6 = Engine(name = "1.6 CRDi", power_hp = 110, displacement_cc = 1582, fuel_type = "Diesel", euro_norm = "Euro 5", model = i30)
+            eng_i30_7 = Engine(name = "1.6 GDi", power_hp = 135, displacement_cc = 1591, fuel_type = "Benzina", euro_norm = "Euro 5", model = i30)
+
+            # i30 I
+            eng_i30_8 = Engine(name = "1.4 MPI", power_hp = 110, displacement_cc = 1396, fuel_type = "Benzina", euro_norm = "Euro 4", model = i30)
+            eng_i30_9 = Engine(name = "1.6 CRDi", power_hp = 90, displacement_cc = 1582, fuel_type = "Diesel", euro_norm = "Euro 4", model = i30)
+
+            db.session.add_all([
+                eng_i30_1, eng_i30_2, eng_i30_3, eng_i30_4, eng_i30_5, eng_i30_6, eng_i30_7, eng_i30_8, eng_i30_9])
+
+        i40 = Model.query.filter_by(name = "i40").first()
+        if i40:
+            eng_i40_1 = Engine(name = "1.7 CRDi", power_hp = 136, displacement_cc = 1685, fuel_type = "Diesel", euro_norm = "Euro 5", model = i40)
+            eng_i40_2 = Engine(name = "1.7 CRDi", power_hp = 115, displacement_cc = 1685, fuel_type = "Diesel", euro_norm = "Euro 5", model = i40)
+            eng_i40_3 = Engine(name = "1.6 GDi", power_hp = 135, displacement_cc = 1591, fuel_type = "Benzina", euro_norm = "Euro 5", model = i40)
+            eng_i40_4 = Engine(name = "2.0 GDi", power_hp = 177, displacement_cc = 1999, fuel_type = "Benzina", euro_norm = "Euro 5", model = i40)
+
+            db.session.add_all([eng_i40_1, eng_i40_2, eng_i40_3, eng_i40_4])
+
+        ioniq = Model.query.filter_by(name = "IONIQ").first()
+        if ioniq:
+            eng_ion_1 = Engine(name = "1.6 GDi Hybrid", power_hp = 141, displacement_cc = 1580, fuel_type = "Hybrid", euro_norm = "Euro 6", model = ioniq)
+            eng_ion_2 = Engine(name = "1.6 GDi Plug-in", power_hp = 141, displacement_cc = 1580, fuel_type = "Hybrid Plug-in", euro_norm = "Euro 6", model = ioniq)
+            eng_ion_3 = Engine(name = "Electric 28kWh", power_hp = 120, displacement_cc = 0, fuel_type = "Electric", euro_norm = "Zero", model = ioniq)
+            eng_ion_4 = Engine(name = "Electric 38kWh", power_hp = 136, displacement_cc = 0, fuel_type = "Electric", euro_norm = "Zero", model = ioniq)
+
+            db.session.add_all([eng_ion_1, eng_ion_2, eng_ion_3, eng_ion_4])
+
+        kona = Model.query.filter_by(name = "Kona").first()
+        if kona:
+            eng_kona_1 = Engine(name = "1.0 T-GDi", power_hp = 120, displacement_cc = 998, fuel_type = "Benzina", euro_norm = "Euro 6", model = kona)
+            eng_kona_2 = Engine(name = "1.6 T-GDi 4x4", power_hp = 177, displacement_cc = 1591, fuel_type = "Benzina", euro_norm = "Euro 6", model = kona)
+            eng_kona_3 = Engine(name = "1.6 GDi Hybrid", power_hp = 141, displacement_cc = 1580, fuel_type = "Hybrid", euro_norm = "Euro 6", model = kona)
+            eng_kona_4 = Engine(name = "Electric 64kWh", power_hp = 204, displacement_cc = 0, fuel_type = "Electric", euro_norm = "Zero", model = kona)
+            eng_kona_5 = Engine(name = "Electric 39kWh", power_hp = 136, displacement_cc = 0, fuel_type = "Electric", euro_norm = "Zero", model = kona)
+
+            db.session.add_all([eng_kona_1, eng_kona_2, eng_kona_3, eng_kona_4, eng_kona_5])
+
+        santa = Model.query.filter_by(name = "Santa Fe").first()
+        if santa:
+            # Santa Fe 4 & 5
+            eng_sf_1 = Engine(name = "2.2 CRDi", power_hp = 200, displacement_cc = 2199, fuel_type = "Diesel", euro_norm = "Euro 6", model = santa)
+            eng_sf_2 = Engine(name = "1.6 T-GDi Hybrid", power_hp = 230, displacement_cc = 1598, fuel_type = "Hybrid", euro_norm = "Euro 6", model = santa)
+            eng_sf_3 = Engine(name = "1.6 T-GDi PHEV", power_hp = 265, displacement_cc = 1598, fuel_type = "Hybrid Plug-in", euro_norm = "Euro 6", model = santa)
+
+            # Santa Fe 3
+            eng_sf_4 = Engine(name = "2.2 CRDi", power_hp = 197, displacement_cc = 2199, fuel_type = "Diesel", euro_norm = "Euro 5", model = santa)
+            eng_sf_5 = Engine(name = "2.0 CRDi", power_hp = 150, displacement_cc = 1995, fuel_type = "Diesel", euro_norm = "Euro 5", model = santa)
+
+            # Santa Fe 2
+            eng_sf_6 = Engine(name = "2.2 CRDi", power_hp = 155, displacement_cc = 2188, fuel_type = "Diesel", euro_norm = "Euro 4", model = santa)
+
+            db.session.add_all([eng_sf_1, eng_sf_2, eng_sf_3, eng_sf_4, eng_sf_5, eng_sf_6])
+
+        tucson = Model.query.filter_by(name = "Tucson").first()
+        if tucson:
+            # Tucson 4
+            eng_tuc_1 = Engine(name = "1.6 T-GDi Hybrid", power_hp = 230, displacement_cc = 1598, fuel_type = "Hybrid", euro_norm = "Euro 6", model = tucson)
+            eng_tuc_2 = Engine(name = "1.6 T-GDi", power_hp = 150, displacement_cc = 1598, fuel_type = "Benzina", euro_norm = "Euro 6", model = tucson)
+            eng_tuc_3 = Engine(name = "1.6 T-GDi mHEV", power_hp = 180, displacement_cc = 1598, fuel_type = "Mild Hybrid", euro_norm = "Euro 6", model = tucson)
+
+            # Tucson 3
+            eng_tuc_4 = Engine(name = "2.0 CRDi 4x4", power_hp = 185, displacement_cc = 1995, fuel_type = "Diesel", euro_norm = "Euro 6", model = tucson)
+            eng_tuc_5 = Engine(name = "1.7 CRDi", power_hp = 115, displacement_cc = 1685, fuel_type = "Diesel", euro_norm = "Euro 6", model = tucson)
+            eng_tuc_6 = Engine(name = "1.6 GDi", power_hp = 132, displacement_cc = 1591, fuel_type = "Benzina", euro_norm = "Euro 6", model = tucson)
+            eng_tuc_7 = Engine(name = "1.6 T-GDi 4x4", power_hp = 177, displacement_cc = 1591, fuel_type = "Benzina", euro_norm = "Euro 6", model = tucson)
+
+            # Tucson 1
+            eng_tuc_8 = Engine(name = "2.0 CRDi", power_hp = 140, displacement_cc = 1991, fuel_type = "Diesel", euro_norm = "Euro 4", model = tucson)
+            eng_tuc_9 = Engine(name = "2.0 CRDi", power_hp = 113, displacement_cc = 1991, fuel_type = "Diesel", euro_norm = "Euro 3", model = tucson)
+            eng_tuc_10 = Engine(name = "2.0 GLS", power_hp = 141, displacement_cc = 1975, fuel_type = "Benzina", euro_norm = "Euro 4", model = tucson)
+
+            db.session.add_all([
+                eng_tuc_1, eng_tuc_2, eng_tuc_3, eng_tuc_4, eng_tuc_5,
+                eng_tuc_6, eng_tuc_7, eng_tuc_8, eng_tuc_9, eng_tuc_10
+            ])
+
+        eng_oct = Engine.query.filter_by(name = "2.0 TDI", power_hp = 150).join(Model).filter( Model.name == "Octavia").first()
+        if eng_oct:
+            listing1 = Listing(
+                title = "Skoda Octavia 2.0 TDI DSG Ambition",
+                year = 2018,
+                mileage = 241925,
+                price = 8690,
+                description = "Masina import Germania, diesel, service la zi. Ofer roti de iarna. Accept orice test.",
+                phone = "0729379058",
+                gearbox_type = "Automata",
+                engine = eng_oct,
+                owner = admin_user
+            )
+            db.session.add(listing1)
+
+        eng_dus = Engine.query.filter_by(name = "1.5 dCi 4x4").join(Model).filter(Model.name == "Duster").first()
+        if eng_dus:
+            listing2 = Listing(
+                title = "Dacia Duster Blue dCi 115 Prestige",
+                year = 2021,
+                mileage = 66950,
+                price = 15990,
+                description = "Anvelope noi de iarna, stare perfecta de functionare.",
+                phone = "0729379058",
+                gearbox_type = "Manuala",
+                engine = eng_dus,
+                owner = admin_user
+            )
+            db.session.add(listing2)
+
+        eng_golf = Engine.query.filter_by(name = "1.9 TDI", power_hp = 101).join(Model).filter(Model.name == "Golf").first()
+        if eng_golf:
+            listing3 = Listing(
+                title = "Volkswagen Golf 1.9 TDI Trendline",
+                year = 2007,
+                mileage = 245780,
+                price = 2950,
+                description = "De noua din Romania, AC, geamuri electrice, navigatie mare.",
+                phone = "0729379058",
+                gearbox_type = "Manuala",
+                engine = eng_golf,
+                owner = admin_user
+            )
+            db.session.add(listing3)
 
         db.session.commit()
 
