@@ -12,27 +12,22 @@ from models import Make, Model, Engine, Listing, User
 
 app = Flask(__name__)
 
-# --- CONFIGURARI ---
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///pycars.db'
-app.config['SECRET_KEY'] = 'cheie-super-secreta-pentru-sesiune'
+app.config['SECRET_KEY'] = '8f42a7305f21960b13d29835d1852467'
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
 
-# Initializam baza de date cu aplicatia
 db.init_app(app)
 
-# --- CONFIGURARE LOGIN MANAGER ---
+# Configurare pentru login manager
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = 'login'  # Daca nu esti logat, te trimite aici
-
+login_manager.login_view = 'login'
 
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-
-# --- RUTE PRINCIPALE ---
-
+# Rutele principale
 @app.route('/', methods = ['GET'])
 def home():
     marci = Make.query.all()
@@ -51,7 +46,6 @@ def home():
                            combustibili = lista_combustibili,
                            anunturi = anunturi_random,
                            user = current_user)
-
 
 @app.route('/cautare', methods = ['GET'])
 def cautare():
@@ -72,8 +66,7 @@ def cautare():
     # Incepem query-ul de baza (join intre tabele)
     query = Listing.query.join(Engine).join(Model).join(Make)
 
-    # --- FILTRARE ---
-    # CORECTIE IMPORTANTA: Folosim marca_id aici, nu model_id!
+    # Aici facem filtrare
     if marca_id and marca_id != "0":
         query = query.filter(Make.id == int(marca_id))
 
@@ -98,7 +91,7 @@ def cautare():
     if km_max and km_max != '':
         query = query.filter(Listing.mileage <= int(km_max))
 
-    # --- SORTARE ---
+    # Sortarile
     sortare = request.args.get('sortare')
     if sortare == 'pret_cresc':
         query = query.order_by(Listing.price.asc())
@@ -114,12 +107,10 @@ def cautare():
     rezultate = query.all()
     return render_template('rezultate.html', anunturi = rezultate, user = current_user)
 
-
 @app.route('/anunt/<int:id>')
 def detalii_anunt(id):
     anunt = Listing.query.get_or_404(id)
     return render_template('detalii.html', anunt = anunt, user = current_user)
-
 
 @app.route('/sterge/<int:id>')
 @login_required
@@ -128,7 +119,7 @@ def sterge_anunt(id):
 
     # Verificam daca anuntul apartine userului logat
     if anunt_de_sters.user_id != current_user.id:
-        flash('Nu ai dreptul să ștergi acest anunț!', 'error')
+        flash('Nu poti sterge acest anunt! Nu este al tau!', 'error')
         return redirect(url_for('profil'))
 
     # Stergem si fisierul fizic (poza)
@@ -143,12 +134,10 @@ def sterge_anunt(id):
     db.session.delete(anunt_de_sters)
     db.session.commit()
 
-    flash('Anunțul a fost șters cu succes.', 'success')
+    flash('Anuntul a fost sters cu succes!', 'success')
     return redirect(url_for('profil'))
 
-
-# --- RUTE AUTH (LOGIN / REGISTER) ---
-
+# Rute pentru login si inregistrare
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -173,7 +162,7 @@ def register():
         email = request.form.get('email')
         parola = request.form.get('password')
 
-        # Validare simpla email
+        # Validarea email-ului
         if not re.match(r"^[\w\.-]+@[\w\.-]+\.\w{2,}$", email):
             flash('Format email incorect!', 'error')
             return redirect(url_for('register'))
@@ -194,11 +183,10 @@ def register():
         db.session.add(new_user)
         db.session.commit()
 
-        flash('Cont creat cu succes! Acum te poți autentifica.', 'success')
+        flash('Cont creat cu succes! Acum il poti folosi pentru autentificare!', 'success')
         return redirect(url_for('login'))
 
     return render_template('register.html', user = current_user)
-
 
 @app.route('/logout')
 @login_required
@@ -206,9 +194,7 @@ def logout():
     logout_user()
     return redirect(url_for('home'))
 
-
-# --- RUTE USER (ADAUGA / PROFIL) ---
-
+# Rute pentru adaugare anunt si profil
 @app.route('/adauga', methods = ['GET', 'POST'])
 @login_required
 def adauga_anunt():
@@ -229,7 +215,6 @@ def adauga_anunt():
                 file = request.files['poza']
                 if file.filename != '':
                     filename = secure_filename(file.filename)
-                    # Ne asiguram ca folderul exista
                     if not os.path.exists(app.config['UPLOAD_FOLDER']):
                         os.makedirs(app.config['UPLOAD_FOLDER'])
 
@@ -252,11 +237,11 @@ def adauga_anunt():
             db.session.add(new_listing)
             db.session.commit()
 
-            flash('Anunțul a fost adăugat cu succes!', 'success')
+            flash('Anuntul a fost adaugat cu succes!', 'success')
             return redirect(url_for('profil'))
 
         except Exception as e:
-            flash(f'A apărut o eroare: {str(e)}', 'error')
+            flash(f'A aparut o eroare: {str(e)}', 'error')
             return redirect(url_for('adauga_anunt'))
 
     motoare_disponibile = Engine.query.all()
@@ -269,9 +254,8 @@ def profil():
     anunturile_mele = Listing.query.filter_by(user_id = current_user.id).all()
     return render_template('profil.html', anunturi = anunturile_mele, user = current_user)
 
-
-# --- PORNIRE APLICATIE ---
+# Pornirea aplicatiei
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-    app.run(debug = True)
+    app.run(debug = True, host = '0.0.0.0') # Pentru a functiona site-ul si pe alte dispozitive conectate la acelasi internet
